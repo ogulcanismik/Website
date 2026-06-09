@@ -1,6 +1,7 @@
 import en from '../data/i18n/en.js';
 import tr from '../data/i18n/tr.js';
 import { refreshThemeToggle } from './theme.js';
+import { parseNameParts } from './name-parts.js';
 
 const locales = { en, tr };
 const STORAGE_KEY = 'locale';
@@ -45,12 +46,13 @@ function updateWelcome(content) {
   const roleEl = document.querySelector('.welcome__role');
   const hintEl = document.querySelector('.welcome__hint');
 
-  if (nameEl) {
-    nameEl.dataset.fullName = content.site.name;
-    const full = nameEl.querySelector('.welcome__name-full');
-    if (nameEl.classList.contains('is-expanded') && full) {
-      full.textContent = content.site.name;
-    }
+  if (nameEl?.classList.contains('is-revealed')) {
+    const parts = parseNameParts(content.site.name);
+    nameEl.querySelector('.welcome__name-o').textContent = parts.first;
+    nameEl.querySelector('.welcome__name-middle').textContent = parts.middle;
+    nameEl.querySelector('.welcome__name-i').textContent = parts.lastInitial;
+    nameEl.querySelector('.welcome__name-rest').textContent = parts.lastRest;
+    nameEl.setAttribute('aria-label', content.site.name);
   }
   if (roleEl) roleEl.textContent = content.site.role;
   if (hintEl) {

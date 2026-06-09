@@ -1,57 +1,80 @@
-import { gsap } from 'gsap';
 import { getContent } from './i18n.js';
+import { parseNameParts } from './name-parts.js';
 
-const HOLD_DELAY = 0.5;
-const REVEAL_DURATION = 0.9;
+const HOLD_DELAY = 850;
+const EXPAND_DURATION = 800;
 
-export function initWelcome() {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function measurePartWidth(text, referenceEl) {
+  const probe = document.createElement('span');
+  probe.textContent = text;
+  probe.setAttribute('aria-hidden', 'true');
+  probe.style.cssText =
+    'position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap;pointer-events:none;';
+  const style = getComputedStyle(referenceEl);
+  probe.style.font = style.font;
+  probe.style.letterSpacing = style.letterSpacing;
+  referenceEl.appendChild(probe);
+  const width = probe.getBoundingClientRect().width;
+  probe.remove();
+  return width;
+}
+
+function applyNameParts(nameEl, parts) {
+  nameEl.querySelector('.welcome__name-o').textContent = parts.first;
+  nameEl.querySelector('.welcome__name-middle').textContent = parts.middle;
+  nameEl.querySelector('.welcome__name-i').textContent = parts.lastInitial;
+  nameEl.querySelector('.welcome__name-rest').textContent = parts.lastRest;
+}
+
+function finishExpanded(welcome, nameEl, middleEl, restEl) {
+  welcome.classList.add('is-expanded', 'is-revealed');
+  nameEl.classList.add('is-expanded', 'is-revealed');
+  middleEl.style.maxWidth = '';
+  restEl.style.maxWidth = '';
+}
+
+async function runWelcomeMorph() {
+  const welcome = document.querySelector('.welcome');
   const nameEl = document.querySelector('.welcome__name');
-  const stage = nameEl?.querySelector('.welcome__name-stage');
-  const initialsEl = nameEl?.querySelector('.welcome__name-initials');
-  const fullEl = nameEl?.querySelector('.welcome__name-full');
-  const role = document.querySelector('.welcome__role');
-  const hint = document.querySelector('.welcome__hint');
+  const middleEl = nameEl?.querySelector('.welcome__name-middle');
+  const restEl = nameEl?.querySelector('.welcome__name-rest');
 
-  if (!nameEl || !stage || !initialsEl || !fullEl || !role) return;
+  if (!welcome || !nameEl || !middleEl || !restEl) return;
 
   const { site } = getContent();
-  const fullName = nameEl.dataset.fullName || site.name;
-  const initials = site.initials || 'OI';
+  const parts = parseNameParts(site.name);
+  applyNameParts(nameEl, parts);
+  nameEl.setAttribute('aria-label', site.name);
 
-  nameEl.dataset.fullName = fullName;
-  initialsEl.textContent = initials;
-  fullEl.textContent = fullName;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (document.fonts?.ready) {
+    await document.fonts.ready;
+  }
+
+  const middleWidth = measurePartWidth(parts.middle, nameEl);
+  const restWidth = measurePartWidth(parts.lastRest, nameEl);
+
+  middleEl.style.setProperty('--expand-width', `${middleWidth}px`);
+  restEl.style.setProperty('--expand-width', `${restWidth}px`);
+
+  welcome.classList.add('is-ready');
 
   if (prefersReducedMotion) {
-    initialsEl.style.display = 'none';
-    stage.style.width = 'auto';
-    stage.style.overflow = 'visible';
-    gsap.set(fullEl, { x: 0 });
-    nameEl.classList.add('is-expanded');
-    gsap.set([role, hint], { opacity: 1, y: 0 });
+    finishExpanded(welcome, nameEl, middleEl, restEl);
     return;
   }
 
-  nameEl.classList.remove('is-expanded');
+  window.setTimeout(() => {
+    welcome.classList.add('is-expanded');
+    nameEl.classList.add('is-expanded');
 
-  const oiWidth = initialsEl.offsetWidth;
-  gsap.set(stage, { width: 'auto', overflow: 'visible', visibility: 'hidden', position: 'absolute' });
-  const fullWidth = stage.offsetWidth;
-  gsap.set(stage, { width: oiWidth, overflow: 'hidden', visibility: 'visible', position: 'relative' });
-  gsap.set(fullEl, { x: 0 });
-  gsap.set([role, hint], { opacity: 0, y: 20 });
+    window.setTimeout(() => {
+      finishExpanded(welcome, nameEl, middleEl, restEl);
+    }, EXPAND_DURATION);
+  }, HOLD_DELAY);
+}
 
-  const slideOffset = -(fullWidth - oiWidth);
-  const revealEnd = 0.15 + REVEAL_DURATION;
-
-  const tl = gsap.timeline({ delay: HOLD_DELAY });
-
-  tl.to(initialsEl, { opacity: 0, x: -24, duration: 0.25, ease: 'power2.in' }, 0)
-    .set(initialsEl, { display: 'none' }, 0.2)
-    .to(stage, { width: fullWidth, duration: REVEAL_DURATION, ease: 'power2.inOut' }, 0.15)
-    .to(fullEl, { x: slideOffset, duration: REVEAL_DURATION, ease: 'power2.inOut' }, 0.15)
-    .add(() => nameEl.classList.add('is-expanded'), revealEnd)
-    .to(role, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, revealEnd + 0.1)
-    .to(hint, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, revealEnd + 0.4);
+export function initWelcome() {
+  void runWelcomeMorph();
 }

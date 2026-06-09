@@ -56,15 +56,17 @@
     <main>
       <section id="welcome" class="welcome" aria-label="Welcome">
         <div class="welcome__content">
-          <h1 class="welcome__name" data-full-name="Oğulcan Ismık">
-            <span class="welcome__name-stage">
-              <span class="welcome__name-initials">OI</span>
-              <span class="welcome__name-full">Oğulcan Ismık</span>
+          <h1 class="welcome__name" aria-label="Oğulcan Ismık">
+            <span class="welcome__name-inner" aria-hidden="true">
+              <span class="welcome__name-o">O</span>
+              <span class="welcome__name-middle">ğulcan </span>
+              <span class="welcome__name-i">I</span>
+              <span class="welcome__name-rest">smık</span>
             </span>
           </h1>
-          <p class="welcome__role">// new grad · game programming</p>
+          <p class="welcome__role" style="opacity: 0; visibility: hidden">// new grad · game programming</p>
         </div>
-        <p class="welcome__hint" aria-hidden="true">
+        <p class="welcome__hint" style="opacity: 0; visibility: hidden" aria-hidden="true">
           descend<span class="welcome__hint-arrow">↓</span>
         </p>
       </section>
