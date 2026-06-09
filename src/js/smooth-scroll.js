@@ -30,6 +30,13 @@ export function initSmoothScroll() {
   return { lenis, scrollTo };
 }
 
+export function refreshScroll() {
+  if (lenis) {
+    lenis.resize();
+  }
+  ScrollTrigger.refresh();
+}
+
 export function scrollTo(target, options = {}) {
   const el = typeof target === 'string' ? document.querySelector(target) : target;
   if (!el) return;
@@ -38,6 +45,10 @@ export function scrollTo(target, options = {}) {
   const duration = options.duration ?? 1.2;
 
   if (lenis) {
+    if (options.refresh !== false) {
+      refreshScroll();
+    }
+
     const rect = el.getBoundingClientRect();
     const top = rect.top + lenis.scroll + offset;
     lenis.scrollTo(top, {

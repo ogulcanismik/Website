@@ -1,5 +1,5 @@
 import { gsap } from 'gsap';
-import { scrollTo } from './smooth-scroll.js';
+import { scrollTo, refreshScroll } from './smooth-scroll.js';
 
 let activePanel = null;
 let isAnimating = false;
@@ -32,7 +32,7 @@ export function openPanel(panelId, { scroll = true } = {}) {
   if (isSamePanel && wrap.classList.contains('is-open')) {
     if (scroll) {
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      scrollTo(panel, { offset: -72, duration: prefersReducedMotion ? 0 : 1.2, force: true });
+      scrollTo('#panels', { offset: -72, duration: prefersReducedMotion ? 0 : 1.2, force: true });
     }
     return;
   }
@@ -41,22 +41,22 @@ export function openPanel(panelId, { scroll = true } = {}) {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const scrollToContent = () => {
-    const panelsSection = document.getElementById('panels');
-    const target = panel ?? panelsSection;
+    const target = document.getElementById('panels');
     if (!target) return;
 
     const runScroll = () => {
+      refreshScroll();
       scrollTo(target, {
         offset: -72,
         duration: prefersReducedMotion ? 0 : 1.2,
         force: true,
+        refresh: false,
       });
     };
 
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        setTimeout(runScroll, 80);
-      });
+      refreshScroll();
+      requestAnimationFrame(runScroll);
     });
   };
 
@@ -89,6 +89,7 @@ export function openPanel(panelId, { scroll = true } = {}) {
       height: 'auto',
       duration: 0.6,
       ease: 'power3.inOut',
+      onUpdate: refreshScroll,
       onComplete: finishOpen,
     }
   );
