@@ -30,21 +30,42 @@ export function openPanel(panelId, { scroll = true } = {}) {
 
   const isSamePanel = activePanel === panelId;
   if (isSamePanel && wrap.classList.contains('is-open')) {
-    if (scroll) scrollTo(panel, { offset: -20 });
+    if (scroll) {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      scrollTo(panel, { offset: -72, duration: prefersReducedMotion ? 0 : 1.2, force: true });
+    }
     return;
   }
 
   isAnimating = true;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const scrollToContent = () => {
+    const panelsSection = document.getElementById('panels');
+    const target = panel ?? panelsSection;
+    if (!target) return;
+
+    const runScroll = () => {
+      scrollTo(target, {
+        offset: -72,
+        duration: prefersReducedMotion ? 0 : 1.2,
+        force: true,
+      });
+    };
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(runScroll, 80);
+      });
+    });
+  };
+
   const finishOpen = () => {
     activePanel = panelId;
     setMenuState(panelId);
     isAnimating = false;
     document.dispatchEvent(new CustomEvent('panel:opened', { detail: { panelId } }));
-    if (scroll) {
-      requestAnimationFrame(() => scrollTo(panel, { offset: -20, duration: prefersReducedMotion ? 0 : 1.2 }));
-    }
+    if (scroll) scrollToContent();
   };
 
   if (activePanel && activePanel !== panelId) {
@@ -118,6 +139,17 @@ export function closePanel({ scroll = false } = {}) {
 
 export function getActivePanel() {
   return activePanel;
+}
+
+export function restorePanelOpen(panelId) {
+  const wrap = wrapper();
+  if (!wrap || !panelId) return;
+
+  showPanel(panelId);
+  wrap.classList.add('is-open');
+  gsap.set(wrap, { height: 'auto' });
+  activePanel = panelId;
+  setMenuState(panelId);
 }
 
 export function initPanels() {

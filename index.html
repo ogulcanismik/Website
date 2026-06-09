@@ -15,6 +15,14 @@
     />
     <meta property="og:type" content="website" />
     <title>Oğulcan Ismık — Portfolio</title>
+    <script>
+      (function () {
+        var theme = localStorage.getItem('theme') || 'dark';
+        var locale = localStorage.getItem('locale') || 'en';
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('lang', locale);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -23,6 +31,21 @@
     />
   </head>
   <body>
+    <div class="top-controls">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button class="lang-toggle__btn is-active" type="button" data-lang="en" aria-pressed="true">EN</button>
+        <span class="lang-toggle__sep" aria-hidden="true">|</span>
+        <button class="lang-toggle__btn" type="button" data-lang="tr" aria-pressed="false">TR</button>
+      </div>
+      <button
+        class="theme-toggle"
+        type="button"
+        data-label-light="Switch to light mode"
+        data-label-dark="Switch to dark mode"
+        aria-label="Switch to light mode"
+      >☀</button>
+    </div>
+
     <main>
       <section id="welcome" class="welcome" aria-label="Welcome">
         <div class="welcome__content">

@@ -34,14 +34,20 @@ export function scrollTo(target, options = {}) {
   const el = typeof target === 'string' ? document.querySelector(target) : target;
   if (!el) return;
 
+  const offset = options.offset ?? 0;
+  const duration = options.duration ?? 1.2;
+
   if (lenis) {
-    lenis.scrollTo(el, {
-      offset: options.offset ?? 0,
-      duration: options.duration ?? 1.2,
-      ...options,
+    const rect = el.getBoundingClientRect();
+    const top = rect.top + lenis.scroll + offset;
+    lenis.scrollTo(top, {
+      duration,
+      force: options.force ?? true,
+      lock: options.lock ?? false,
     });
   } else {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (offset) window.scrollBy({ top: offset, behavior: 'smooth' });
   }
 }
 

@@ -1,29 +1,37 @@
 import '../styles/base.css';
+import '../styles/controls.css';
 import '../styles/welcome.css';
 import '../styles/menu.css';
 import '../styles/panels.css';
 import '../styles/responsive.css';
 
-import { site } from '../data/site.js';
+import { initTheme } from './theme.js';
+import { initI18n, applyStaticContent } from './i18n.js';
 import { initSmoothScroll } from './smooth-scroll.js';
 import { initWelcome } from './welcome.js';
-import { renderPanels } from './render-panels.js';
-import { initPanels } from './panels.js';
+import { renderPanels, rerenderPanels } from './render-panels.js';
+import { initPanels, getActivePanel, restorePanelOpen } from './panels.js';
 import { initMenu } from './menu.js';
 import { initBackToMenu } from './back-to-menu.js';
 
-function populateSiteContent() {
-  const nameEl = document.querySelector('.welcome__name');
-  const roleEl = document.querySelector('.welcome__role');
-  if (nameEl) nameEl.textContent = site.name;
-  if (roleEl) roleEl.textContent = site.role;
+function handleLocaleChange() {
+  const activePanel = getActivePanel();
+  const container = document.querySelector('.panels__wrapper');
+  if (!container) return;
+
+  rerenderPanels(container);
+  if (activePanel) restorePanelOpen(activePanel);
 }
 
 function init() {
-  populateSiteContent();
+  initTheme();
+  applyStaticContent();
 
   const panelsContainer = document.querySelector('.panels__wrapper');
   if (panelsContainer) renderPanels(panelsContainer);
+
+  initI18n();
+  document.addEventListener('locale:changed', handleLocaleChange);
 
   initSmoothScroll();
   initWelcome();

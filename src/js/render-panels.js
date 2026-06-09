@@ -1,13 +1,11 @@
-import { projects } from '../data/projects.js';
-import { about } from '../data/about.js';
-import { resume } from '../data/resume.js';
-import { contact } from '../data/contact.js';
+import { getContent, resolveSocialLabel } from './i18n.js';
 
-function renderProjects() {
+function renderProjects(content) {
+  const { ui, projects } = content;
   return `
     <div class="panel__inner">
-      <p class="section-label">// projects</p>
-      <h2 class="panel__title">Selected Work</h2>
+      <p class="section-label">${ui.panels.projectsLabel}</p>
+      <h2 class="panel__title">${ui.panels.projectsTitle}</h2>
       ${projects
         .map(
           (p) => `
@@ -18,8 +16,8 @@ function renderProjects() {
             ${p.tags.map((tag) => `<span class="project-card__tag">${tag}</span>`).join('')}
           </div>
           <div class="project-card__links">
-            ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">live →</a>` : ''}
-            ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer">github →</a>` : ''}
+            ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">${ui.links.live}</a>` : ''}
+            ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer">${ui.links.github}</a>` : ''}
           </div>
         </article>
       `
@@ -29,11 +27,12 @@ function renderProjects() {
   `;
 }
 
-function renderAbout() {
+function renderAbout(content) {
+  const { ui, about } = content;
   return `
     <div class="panel__inner">
-      <p class="section-label">// about</p>
-      <h2 class="panel__title">About Me</h2>
+      <p class="section-label">${ui.panels.aboutLabel}</p>
+      <h2 class="panel__title">${ui.panels.aboutTitle}</h2>
       <div class="about">
         <div class="about__avatar">${about.initials}</div>
         <p class="about__bio">${about.bio}</p>
@@ -43,7 +42,7 @@ function renderAbout() {
         ${
           about.interests?.length
             ? `<div class="about__interests">
-          <p class="section-label">// interests</p>
+          <p class="section-label">${ui.panels.interestsLabel}</p>
           <div class="about__skills">
             ${about.interests.map((i) => `<span class="about__skill">${i}</span>`).join('')}
           </div>
@@ -55,16 +54,17 @@ function renderAbout() {
   `;
 }
 
-function renderCV() {
+function renderCV(content) {
+  const { ui, resume } = content;
   return `
     <div class="panel__inner">
-      <p class="section-label">// cv</p>
-      <h2 class="panel__title">Curriculum Vitae</h2>
+      <p class="section-label">${ui.panels.cvLabel}</p>
+      <h2 class="panel__title">${ui.panels.cvTitle}</h2>
       <a class="cv__download" href="${resume.pdfUrl}" download>
-        ↓ download pdf
+        ${ui.panels.cvDownload}
       </a>
       <div class="cv__section">
-        <h3 class="cv__section-title">Experience</h3>
+        <h3 class="cv__section-title">${ui.panels.experience}</h3>
         ${resume.experience
           .map(
             (e) => `
@@ -81,7 +81,7 @@ function renderCV() {
           .join('')}
       </div>
       <div class="cv__section">
-        <h3 class="cv__section-title">Education</h3>
+        <h3 class="cv__section-title">${ui.panels.education}</h3>
         ${resume.education
           .map(
             (e) => `
@@ -97,7 +97,7 @@ function renderCV() {
           .join('')}
       </div>
       <div class="cv__section">
-        <h3 class="cv__section-title">Skills</h3>
+        <h3 class="cv__section-title">${ui.panels.skills}</h3>
         <div class="cv__skills">
           ${resume.skills.map((s) => `<span class="cv__skill">${s}</span>`).join('')}
         </div>
@@ -106,11 +106,12 @@ function renderCV() {
   `;
 }
 
-function renderContact() {
+function renderContact(content) {
+  const { ui, contact } = content;
   return `
     <div class="panel__inner">
-      <p class="section-label">// contact</p>
-      <h2 class="panel__title">Get in Touch</h2>
+      <p class="section-label">${ui.panels.contactLabel}</p>
+      <h2 class="panel__title">${ui.panels.contactTitle}</h2>
       <a class="contact__email" href="mailto:${contact.email}">${contact.email}</a>
       ${contact.location ? `<p class="contact__location mono">${contact.location}</p>` : ''}
       <div class="contact__socials">
@@ -118,7 +119,7 @@ function renderContact() {
           .map(
             (s) => `
           <a class="contact__social" href="${s.url}" target="_blank" rel="noopener noreferrer">
-            <span class="contact__social-label">${s.label}</span>
+            <span class="contact__social-label">${resolveSocialLabel(s, ui)}</span>
             <span class="contact__social-handle">${s.handle}</span>
           </a>
         `
@@ -127,18 +128,18 @@ function renderContact() {
       </div>
       <form class="contact__form" onsubmit="return false;">
         <div class="contact__field">
-          <label for="contact-name">Name</label>
-          <input type="text" id="contact-name" name="name" placeholder="Your name" disabled />
+          <label for="contact-name">${ui.panels.formName}</label>
+          <input type="text" id="contact-name" name="name" placeholder="${ui.panels.formNamePlaceholder}" disabled />
         </div>
         <div class="contact__field">
-          <label for="contact-email">Email</label>
-          <input type="email" id="contact-email" name="email" placeholder="you@example.com" disabled />
+          <label for="contact-email">${ui.panels.formEmail}</label>
+          <input type="email" id="contact-email" name="email" placeholder="${ui.panels.formEmailPlaceholder}" disabled />
         </div>
         <div class="contact__field">
-          <label for="contact-message">Message</label>
-          <textarea id="contact-message" name="message" placeholder="Your message..." disabled></textarea>
+          <label for="contact-message">${ui.panels.formMessage}</label>
+          <textarea id="contact-message" name="message" placeholder="${ui.panels.formMessagePlaceholder}" disabled></textarea>
         </div>
-        <button type="submit" class="contact__submit" disabled>coming soon</button>
+        <button type="submit" class="contact__submit" disabled>${ui.panels.comingSoon}</button>
       </form>
     </div>
   `;
@@ -152,12 +153,19 @@ const panelRenderers = {
 };
 
 export function renderPanels(container) {
+  const content = getContent();
+
   Object.entries(panelRenderers).forEach(([id, render]) => {
     const panel = document.createElement('div');
     panel.className = 'panel';
     panel.id = `panel-${id}`;
     panel.dataset.panel = id;
-    panel.innerHTML = render();
+    panel.innerHTML = render(content);
     container.appendChild(panel);
   });
+}
+
+export function rerenderPanels(container) {
+  container.innerHTML = '';
+  renderPanels(container);
 }
