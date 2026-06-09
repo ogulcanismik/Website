@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Portfolio of Oğulcan Ismık — computer engineering student. Projects, about, CV, and contact."
+      content="Portfolio of Oğulcan Ismık — new grad in computer engineering, focused on game programming with Unity, C#, and TTRPG tools."
     />
     <meta name="theme-color" content="#12151c" />
     <meta property="og:title" content="Oğulcan Ismık — Portfolio" />
     <meta
       property="og:description"
-      content="Computer engineering student portfolio showcasing projects, experience, and contact."
+      content="New grad portfolio focused on game programming — Unity, C#, jam games, and TTRPG tools."
     />
     <meta property="og:type" content="website" />
     <title>Oğulcan Ismık — Portfolio</title>
@@ -31,6 +31,13 @@
     />
   </head>
   <body>
+    <div class="identity-mark" aria-hidden="true">
+      <span class="identity-mark__text identity-mark__text--binary">01</span>
+      <span class="identity-mark__text identity-mark__text--initials">OI</span>
+      <span class="identity-mark__glitch identity-mark__glitch--a">01</span>
+      <span class="identity-mark__glitch identity-mark__glitch--b">OI</span>
+    </div>
+
     <div class="top-controls">
       <div class="lang-toggle" role="group" aria-label="Language">
         <button class="lang-toggle__btn is-active" type="button" data-lang="en" aria-pressed="true">EN</button>
@@ -49,17 +56,22 @@
     <main>
       <section id="welcome" class="welcome" aria-label="Welcome">
         <div class="welcome__content">
-          <h1 class="welcome__name">Oğulcan Ismık</h1>
-          <p class="welcome__role">// computer engineering student</p>
+          <h1 class="welcome__name" data-full-name="Oğulcan Ismık">
+            <span class="welcome__name-stage">
+              <span class="welcome__name-initials">OI</span>
+              <span class="welcome__name-full">Oğulcan Ismık</span>
+            </span>
+          </h1>
+          <p class="welcome__role">// new grad · game programming</p>
         </div>
         <p class="welcome__hint" aria-hidden="true">
-          scroll<span class="welcome__hint-arrow">↓</span>
+          descend<span class="welcome__hint-arrow">↓</span>
         </p>
       </section>
 
       <nav id="menu" class="menu" aria-label="Main navigation">
         <button class="menu__column" data-panel="projects" type="button">
-          <span class="menu__label">Projects</span>
+          <span class="menu__label">Creations</span>
         </button>
         <button class="menu__column" data-panel="about" type="button">
           <span class="menu__label">About Me</span>
@@ -83,7 +95,7 @@
       aria-label="Back to menu"
       aria-hidden="true"
     >
-      ↑ back to menu
+      ↑ return to menu
     </button>
 
     <script type="module" src="/src/js/main.js"></script>

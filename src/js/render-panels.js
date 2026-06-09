@@ -1,5 +1,11 @@
 import { getContent, resolveSocialLabel } from './i18n.js';
 
+function renderQuestMeta(p) {
+  if (!p.questMeta) return '';
+  const { status, type } = p.questMeta;
+  return `<p class="project-card__meta">// ${status} · ${type}</p>`;
+}
+
 function renderProjects(content) {
   const { ui, projects } = content;
   return `
@@ -9,7 +15,8 @@ function renderProjects(content) {
       ${projects
         .map(
           (p) => `
-        <article class="project-card" id="${p.id}">
+        <article class="project-card${p.placeholder ? ' project-card--placeholder' : ''}" id="${p.id}">
+          ${renderQuestMeta(p)}
           <h3 class="project-card__title">${p.title}</h3>
           <p class="project-card__description">${p.description}</p>
           <div class="project-card__tags">
@@ -34,7 +41,23 @@ function renderAbout(content) {
       <p class="section-label">${ui.panels.aboutLabel}</p>
       <h2 class="panel__title">${ui.panels.aboutTitle}</h2>
       <div class="about">
-        <div class="about__avatar">${about.initials}</div>
+        <div class="about__header">
+          <div class="about__avatar">${about.initials}</div>
+          <div class="stat-block">
+            <div class="stat-block__row">
+              <span class="stat-block__label">${ui.panels.statClass}</span>
+              <span class="stat-block__value">${about.class}</span>
+            </div>
+            <div class="stat-block__row">
+              <span class="stat-block__label">${ui.panels.statBackground}</span>
+              <span class="stat-block__value">${about.background}</span>
+            </div>
+            <div class="stat-block__row">
+              <span class="stat-block__label">${ui.panels.statAlignment}</span>
+              <span class="stat-block__value">${about.alignment}</span>
+            </div>
+          </div>
+        </div>
         <p class="about__bio">${about.bio}</p>
         <div class="about__skills">
           ${about.skills.map((s) => `<span class="about__skill">${s}</span>`).join('')}

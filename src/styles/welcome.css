@@ -23,6 +23,31 @@
   letter-spacing: -0.02em;
   color: var(--color-text);
   line-height: 1.1;
+  min-height: 1.1em;
+}
+
+.welcome__name-stage {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.welcome__name-initials {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.welcome__name-full {
+  display: inline-block;
+  white-space: nowrap;
+  will-change: transform;
 }
 
 .welcome__role {

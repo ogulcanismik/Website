@@ -1,4 +1,5 @@
 export const site = {
   name: 'Oğulcan Ismık',
-  role: '// computer engineering student',
+  initials: 'OI',
+  role: '// new grad · game programming',
 };

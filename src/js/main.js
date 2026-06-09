@@ -1,8 +1,10 @@
 import '../styles/base.css';
 import '../styles/controls.css';
+import '../styles/identity.css';
 import '../styles/welcome.css';
 import '../styles/menu.css';
 import '../styles/panels.css';
+import '../styles/fantasy.css';
 import '../styles/responsive.css';
 
 import { initTheme } from './theme.js';

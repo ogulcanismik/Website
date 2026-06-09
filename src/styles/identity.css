@@ -1,0 +1,165 @@
+.identity-mark {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 200;
+  width: 2ch;
+  height: 1.2em;
+  opacity: 0.75;
+  user-select: none;
+  pointer-events: none;
+}
+
+.identity-mark__text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  line-height: 1.2;
+  opacity: 0;
+}
+
+.identity-mark__text--binary {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  animation: identityBinary 5.6s infinite;
+}
+
+.identity-mark__text--initials {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  animation: identityInitials 5.6s infinite;
+}
+
+.identity-mark__glitch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  opacity: 0;
+  pointer-events: none;
+  animation: identityGlitch 5.6s infinite;
+}
+
+.identity-mark__glitch--a {
+  color: var(--color-accent);
+  clip-path: inset(0 0 55% 0);
+  animation-name: identityGlitchA;
+}
+
+.identity-mark__glitch--b {
+  color: var(--color-text-muted);
+  clip-path: inset(45% 0 0 0);
+  animation-name: identityGlitchB;
+}
+
+@keyframes identityBinary {
+  0%,
+  42% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes identityInitials {
+  0%,
+  46% {
+    opacity: 0;
+  }
+  50%,
+  92% {
+    opacity: 1;
+  }
+  96%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes identityGlitchA {
+  0%,
+  43% {
+    opacity: 0;
+    transform: translate(0);
+  }
+  44% {
+    opacity: 0.9;
+    transform: translate(2px, -1px);
+  }
+  45% {
+    opacity: 0.7;
+    transform: translate(-2px, 1px);
+  }
+  46% {
+    opacity: 0;
+    transform: translate(1px, 0);
+  }
+  93%,
+  100% {
+    opacity: 0;
+    transform: translate(0);
+  }
+}
+
+@keyframes identityGlitchB {
+  0%,
+  43% {
+    opacity: 0;
+    transform: translate(0);
+  }
+  44% {
+    opacity: 0.7;
+    transform: translate(-2px, 1px);
+  }
+  45% {
+    opacity: 0.9;
+    transform: translate(2px, -1px);
+  }
+  46% {
+    opacity: 0;
+    transform: translate(-1px, 0);
+  }
+  93%,
+  94% {
+    opacity: 0;
+    transform: translate(0);
+  }
+  95% {
+    opacity: 0.9;
+    transform: translate(2px, 0);
+  }
+  96% {
+    opacity: 0;
+    transform: translate(-2px, 0);
+  }
+}
+
+@media (max-width: 767px) {
+  .identity-mark {
+    top: 0.75rem;
+    left: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .identity-mark__text--binary {
+    display: none;
+    animation: none;
+  }
+
+  .identity-mark__text--initials {
+    opacity: 1;
+    animation: none;
+  }
+
+  .identity-mark__glitch {
+    display: none;
+  }
+}

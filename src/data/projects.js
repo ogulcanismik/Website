@@ -1,3 +1,4 @@
+// Deprecated — content lives in src/data/i18n/en.js and tr.js
 export const projects = [
   {
     id: 'keep-the-power-up',

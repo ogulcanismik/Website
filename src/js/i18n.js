@@ -45,7 +45,13 @@ function updateWelcome(content) {
   const roleEl = document.querySelector('.welcome__role');
   const hintEl = document.querySelector('.welcome__hint');
 
-  if (nameEl) nameEl.textContent = content.site.name;
+  if (nameEl) {
+    nameEl.dataset.fullName = content.site.name;
+    const full = nameEl.querySelector('.welcome__name-full');
+    if (nameEl.classList.contains('is-expanded') && full) {
+      full.textContent = content.site.name;
+    }
+  }
   if (roleEl) roleEl.textContent = content.site.role;
   if (hintEl) {
     hintEl.innerHTML = `${content.ui.scroll}<span class="welcome__hint-arrow">↓</span>`;
