@@ -71,6 +71,14 @@ export default {
   },
   projects: [
     {
+      id: 'the-double-crime',
+      title: 'The Double Crime',
+      description: 'Placeholder — procedural dungeon crawler in early development.',
+      tags: ['unity', 'c#', 'game jam'],
+      questMeta: { status: 'In Development', type: 'Game' },
+      github: 'https://github.com/ogulcanismik',
+    },
+    {
       id: 'keep-the-power-up',
       title: 'Keep The Power Up',
       description:
@@ -85,14 +93,6 @@ export default {
       description: 'Placeholder — game project details coming soon.',
       tags: ['unity', 'c#', 'game jam'],
       questMeta: { status: 'Shipped', type: 'Game' },
-      github: 'https://github.com/ogulcanismik',
-    },
-    {
-      id: 'the-double-crime',
-      title: 'The Double Crime',
-      description: 'Placeholder — procedural dungeon crawler in early development.',
-      tags: ['unity', 'c#', 'game jam'],
-      questMeta: { status: 'In Development', type: 'Game' },
       github: 'https://github.com/ogulcanismik',
     },
     {
