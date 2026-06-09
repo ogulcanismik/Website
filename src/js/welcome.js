@@ -26,11 +26,19 @@ function applyNameParts(nameEl, parts) {
   nameEl.querySelector('.welcome__name-rest').textContent = parts.lastRest;
 }
 
+function revealSubtext() {
+  document.querySelectorAll('.welcome__role, .welcome__hint').forEach((el) => {
+    el.style.removeProperty('opacity');
+    el.style.removeProperty('visibility');
+  });
+}
+
 function finishExpanded(welcome, nameEl, middleEl, restEl) {
   welcome.classList.add('is-expanded', 'is-revealed');
   nameEl.classList.add('is-expanded', 'is-revealed');
   middleEl.style.maxWidth = '';
   restEl.style.maxWidth = '';
+  revealSubtext();
 }
 
 async function runWelcomeMorph() {
@@ -68,6 +76,7 @@ async function runWelcomeMorph() {
   window.setTimeout(() => {
     welcome.classList.add('is-expanded');
     nameEl.classList.add('is-expanded');
+    revealSubtext();
 
     window.setTimeout(() => {
       finishExpanded(welcome, nameEl, middleEl, restEl);

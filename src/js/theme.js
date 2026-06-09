@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'theme';
 const THEMES = ['dark', 'light'];
+const THEME_TRANSITION_MS = 450;
 
 let currentTheme = 'dark';
 
@@ -18,18 +19,40 @@ function updateToggle(theme) {
   btn.textContent = isDark ? '☀' : '☾';
 }
 
+function applyTheme(theme) {
+  currentTheme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem(STORAGE_KEY, theme);
+  updateThemeColor(theme);
+  updateToggle(theme);
+}
+
+function applyThemeWithTransition(theme) {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReducedMotion) {
+    applyTheme(theme);
+    return;
+  }
+
+  if (document.startViewTransition) {
+    document.startViewTransition(() => applyTheme(theme));
+    return;
+  }
+
+  const root = document.documentElement;
+  root.classList.add('theme-transition');
+  applyTheme(theme);
+  window.setTimeout(() => root.classList.remove('theme-transition'), THEME_TRANSITION_MS);
+}
+
 export function getTheme() {
   return currentTheme;
 }
 
 export function setTheme(theme) {
   if (!THEMES.includes(theme) || theme === currentTheme) return;
-
-  currentTheme = theme;
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem(STORAGE_KEY, theme);
-  updateThemeColor(theme);
-  updateToggle(theme);
+  applyThemeWithTransition(theme);
 }
 
 export function refreshThemeToggle() {
@@ -44,9 +67,7 @@ export function initTheme() {
     currentTheme = 'dark';
   }
 
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  updateThemeColor(currentTheme);
-  updateToggle(currentTheme);
+  applyTheme(currentTheme);
 
   const btn = document.querySelector('.theme-toggle');
   if (btn) {

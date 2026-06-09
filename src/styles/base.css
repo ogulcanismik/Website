@@ -30,6 +30,7 @@
   --menu-column-count: 4;
   --transition-panel: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-hover: 0.3s ease;
+  --transition-theme: 0.45s ease;
   --section-height: 100vh;
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -74,6 +75,22 @@ body {
   color: var(--color-text);
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--transition-theme);
+    animation-timing-function: ease-in-out;
+  }
+
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition-property: background-color, color, border-color, outline-color, fill, stroke, box-shadow;
+    transition-duration: var(--transition-theme);
+    transition-timing-function: ease;
+  }
 }
 
 img {

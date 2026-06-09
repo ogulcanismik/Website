@@ -3,6 +3,7 @@ export default {
     title: 'Oğulcan Ismık — Portfolio',
     description:
       'Portfolio of Oğulcan Ismık — new grad in computer engineering, focused on game programming with Unity, C#, and TTRPG tools.',
+    url: 'https://ogulcanismik.com/',
   },
   site: {
     name: 'Oğulcan Ismık',
@@ -79,22 +80,20 @@ export default {
       github: 'https://github.com/ogulcanismik',
     },
     {
-      id: 'game-placeholder-1',
-      title: 'Untitled Game Project',
+      id: 'orpheus',
+      title: 'Orpheus Unreturned',
       description: 'Placeholder — game project details coming soon.',
-      tags: ['unity', 'c#'],
-      questMeta: { status: 'In Development', type: 'Game' },
+      tags: ['unity', 'c#', 'game jam'],
+      questMeta: { status: 'Shipped', type: 'Game' },
       github: 'https://github.com/ogulcanismik',
-      placeholder: true,
     },
     {
-      id: 'game-placeholder-2',
-      title: 'Dungeon Crawler Prototype',
+      id: 'the-double-crime',
+      title: 'The Double Crime',
       description: 'Placeholder — procedural dungeon crawler in early development.',
-      tags: ['unity', 'procedural generation'],
+      tags: ['unity', 'c#', 'game jam'],
       questMeta: { status: 'In Development', type: 'Game' },
       github: 'https://github.com/ogulcanismik',
-      placeholder: true,
     },
     {
       id: 'attendance-dice',

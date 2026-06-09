@@ -39,6 +39,12 @@ function updateMeta(content) {
 
   const ogDescription = document.querySelector('meta[property="og:description"]');
   if (ogDescription) ogDescription.setAttribute('content', content.meta.description);
+
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical && content.meta.url) canonical.setAttribute('href', content.meta.url);
+
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl && content.meta.url) ogUrl.setAttribute('content', content.meta.url);
 }
 
 function updateWelcome(content) {

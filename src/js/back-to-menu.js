@@ -1,20 +1,26 @@
 import { scrollTo, getLenis } from './smooth-scroll.js';
 import { closePanel, getActivePanel } from './panels.js';
 
-const MENU_VISIBILITY_THRESHOLD = 72;
+const VISIBILITY_THRESHOLD = 72;
 
-function isMenuSubstantiallyVisible(menu) {
-  const rect = menu.getBoundingClientRect();
+function isElementSubstantiallyVisible(el) {
+  const rect = el.getBoundingClientRect();
   const vh = window.innerHeight;
   const visibleTop = Math.max(0, rect.top);
   const visibleBottom = Math.min(vh, rect.bottom);
   const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-  return visibleHeight > MENU_VISIBILITY_THRESHOLD;
+  return visibleHeight > VISIBILITY_THRESHOLD;
 }
 
 function updateBackToMenuVisibility(btn, panelOpen) {
   const menu = document.getElementById('menu');
-  const shouldShow = panelOpen && menu && !isMenuSubstantiallyVisible(menu);
+  const welcome = document.getElementById('welcome');
+  const shouldShow =
+    panelOpen &&
+    menu &&
+    welcome &&
+    !isElementSubstantiallyVisible(welcome) &&
+    !isElementSubstantiallyVisible(menu);
 
   btn.classList.toggle('is-visible', shouldShow);
   btn.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
@@ -46,6 +52,7 @@ export function initBackToMenu() {
   }
 
   window.addEventListener('resize', onScroll, { passive: true });
+  onScroll();
 
   btn.addEventListener('click', async () => {
     if (!getActivePanel()) {

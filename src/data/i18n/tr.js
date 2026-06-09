@@ -3,6 +3,7 @@ export default {
     title: 'Oğulcan Ismık — Portfolyo',
     description:
       'Oğulcan Ismık portfolyosu — bilgisayar mühendisliği yeni mezunu, Unity, C# ve TTRPG araçlarına odaklı oyun programlama.',
+    url: 'https://ogulcanismik.com/',
   },
   site: {
     name: 'Oğulcan Ismık',
