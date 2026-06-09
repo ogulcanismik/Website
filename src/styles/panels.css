@@ -216,8 +216,22 @@
 .contact__email {
   font-family: var(--font-mono);
   font-size: 1.1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 0.75rem;
   display: inline-block;
+}
+
+.contact__location {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 2rem;
+}
+
+.about__interests {
+  margin-top: 1.5rem;
+}
+
+.about__interests .section-label {
+  margin-bottom: 1rem;
 }
 
 .contact__socials {

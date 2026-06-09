@@ -1,4 +1,4 @@
 export const site = {
-  name: 'Your Name',
-  role: '// software developer',
+  name: 'Oğulcan Ismık',
+  role: '// computer engineering student',
 };

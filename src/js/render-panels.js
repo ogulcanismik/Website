@@ -18,8 +18,8 @@ function renderProjects() {
             ${p.tags.map((tag) => `<span class="project-card__tag">${tag}</span>`).join('')}
           </div>
           <div class="project-card__links">
-            <a href="${p.link}" target="_blank" rel="noopener noreferrer">live →</a>
-            <a href="${p.github}" target="_blank" rel="noopener noreferrer">github →</a>
+            ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">live →</a>` : ''}
+            ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer">github →</a>` : ''}
           </div>
         </article>
       `
@@ -40,6 +40,16 @@ function renderAbout() {
         <div class="about__skills">
           ${about.skills.map((s) => `<span class="about__skill">${s}</span>`).join('')}
         </div>
+        ${
+          about.interests?.length
+            ? `<div class="about__interests">
+          <p class="section-label">// interests</p>
+          <div class="about__skills">
+            ${about.interests.map((i) => `<span class="about__skill">${i}</span>`).join('')}
+          </div>
+        </div>`
+            : ''
+        }
       </div>
     </div>
   `;
@@ -102,6 +112,7 @@ function renderContact() {
       <p class="section-label">// contact</p>
       <h2 class="panel__title">Get in Touch</h2>
       <a class="contact__email" href="mailto:${contact.email}">${contact.email}</a>
+      ${contact.location ? `<p class="contact__location mono">${contact.location}</p>` : ''}
       <div class="contact__socials">
         ${contact.socials
           .map(
