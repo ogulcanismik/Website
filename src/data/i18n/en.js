@@ -59,7 +59,7 @@ export default {
     class: 'New Graduate Game Developer',
     background: 'Computer Engineering',
     alignment: 'Chaotic Good',
-    bio: 'I build mechanics and environments in C# and Unity. Sole programmer on several qualifying GameJam entries. Passionate about telling the stories from the worlds of my own. Founded and co-led the Game Development & Animation Club in my university. Computer Engineering graduate from Yeditepe University, with Erasmus+ experience in France.',
+    bio: 'I build mechanics and environments in C# and Unity. Sole programmer on several qualifying GameJam entries. Passionate about telling stories from worlds of my own. Founded and co-led the Game Development & Animation Club in my university. Computer Engineering graduate from Yeditepe University, with Erasmus+ experience in France.',
     skills: ['Unity', 'C#', 'C / C++', 'Git', 'Flutter', 'Dart', 'Python', 'Java', 'SQL'],
     interests: [
       'Strategy Games',
