@@ -8,7 +8,7 @@ export default {
   site: {
     name: 'Oğulcan Ismık',
     initials: 'OI',
-    role: '// new grad · game programming',
+    role: '// new graduate · game development',
   },
   ui: {
     scroll: 'descend',
@@ -31,7 +31,7 @@ export default {
       statBackground: 'Background',
       statAlignment: 'Alignment',
       cvLabel: '// cv',
-      cvTitle: 'Curriculum Vitae',
+      cvTitle: 'CV',
       cvDownload: '↓ download pdf',
       experience: 'Experience',
       education: 'Education',
@@ -56,17 +56,18 @@ export default {
   },
   about: {
     initials: 'OI',
-    class: 'Aspiring Game Programmer',
-    background: 'TTRPG & Systems',
-    alignment: 'Lawful Creative',
-    bio: 'I build mechanics, tools, and worlds in Unity and C#. Sole programmer on a qualifying Startgate Game Jam entry. Built a TTRPG dice engine during my MaviPiksel internship. Founded and co-led the Game Development & Animation Club — a team of 12. Computer Engineering graduate from Yeditepe University, with Erasmus+ experience at UTBM in France. When not working on games, I design tabletop systems and low-level experiments in C.',
+    class: 'New Graduate Game Developer',
+    background: 'Computer Engineering',
+    alignment: 'Chaotic Good',
+    bio: 'I build mechanics and environments in C# and Unity. Sole programmer on several qualifying GameJam entries. Passionate about telling the stories from the worlds of my own. Founded and co-led the Game Development & Animation Club in my university. Computer Engineering graduate from Yeditepe University, with Erasmus+ experience in France.',
     skills: ['Unity', 'C#', 'C / C++', 'Git', 'Flutter', 'Dart', 'Python', 'Java', 'SQL'],
     interests: [
-      'TTRPG & Storytelling',
       'Strategy Games',
+      'TTRPG & Storytelling',
       'IoT (Arduino & ESP)',
-      'Clean Energy',
-      'World & Art History',
+      'Clean Energy & Sustainability',
+      'World History',
+      'Art History',
     ],
   },
   projects: [
@@ -100,7 +101,7 @@ export default {
       title: 'Attendance Tracker & TTRPG Dice Engine',
       description:
         'Built during internship at MaviPiksel using Flutter and Dart — an attendance tracking system and a TTRPG dice engine with frontend integration in a professional environment.',
-      tags: ['flutter', 'dart', 'ttrpg'],
+      tags: ['flutter', 'dart'],
       questMeta: { status: 'Shipped', type: 'Tool' },
       github: 'https://github.com/ogulcanismik',
     },
@@ -166,14 +167,14 @@ export default {
     ],
     education: [
       {
-        degree: 'Erasmus+ Exchange Program',
-        school: 'Université de Technologie de Belfort-Montbéliard, France',
-        period: 'Feb 2025 — Jun 2025',
-      },
-      {
         degree: 'B.S. Computer Engineering',
         school: 'Yeditepe University, Istanbul',
         period: 'Sep 2022 — Present',
+      },
+      {
+        degree: 'Erasmus+ Exchange Program',
+        school: 'Université de Technologie de Belfort-Montbéliard, France',
+        period: 'Feb 2025 — Jun 2025',
       },
       {
         degree: 'High School Diploma',
@@ -186,13 +187,13 @@ export default {
       'C / C++',
       'C#',
       'Python',
-      'Dart',
+      //'Dart',
       'SQL',
       'Flutter',
       'Unity',
       'Android Studio',
       'Git',
-      'Playwright',
+      //'Playwright',
       'Power BI',
       'English (C1)',
       'French (A2)',
