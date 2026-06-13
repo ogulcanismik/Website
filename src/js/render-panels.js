@@ -6,30 +6,35 @@ function renderQuestMeta(p) {
   return `<p class="project-card__meta">// ${status} · ${type}</p>`;
 }
 
+function renderProjectCard(p, ui) {
+  const imageStyle = p.image ? ` style="--project-image: url('${p.image}')"` : '';
+  const imageClass = p.image ? ' project-card--has-image' : '';
+
+  return `
+        <article class="project-card${imageClass}${p.placeholder ? ' project-card--placeholder' : ''}" id="${p.id}"${imageStyle}>
+          <div class="project-card__content">
+            ${renderQuestMeta(p)}
+            <h3 class="project-card__title">${p.title}</h3>
+            <p class="project-card__description">${p.description}</p>
+            <div class="project-card__tags">
+              ${p.tags.map((tag) => `<span class="project-card__tag">${tag}</span>`).join('')}
+            </div>
+            <div class="project-card__links">
+              ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">${ui.links.live}</a>` : ''}
+              ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer">${ui.links.github}</a>` : ''}
+            </div>
+          </div>
+        </article>
+      `;
+}
+
 function renderProjects(content) {
   const { ui, projects } = content;
   return `
     <div class="panel__inner">
       <p class="section-label">${ui.panels.projectsLabel}</p>
       <h2 class="panel__title">${ui.panels.projectsTitle}</h2>
-      ${projects
-        .map(
-          (p) => `
-        <article class="project-card${p.placeholder ? ' project-card--placeholder' : ''}" id="${p.id}">
-          ${renderQuestMeta(p)}
-          <h3 class="project-card__title">${p.title}</h3>
-          <p class="project-card__description">${p.description}</p>
-          <div class="project-card__tags">
-            ${p.tags.map((tag) => `<span class="project-card__tag">${tag}</span>`).join('')}
-          </div>
-          <div class="project-card__links">
-            ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">${ui.links.live}</a>` : ''}
-            ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer">${ui.links.github}</a>` : ''}
-          </div>
-        </article>
-      `
-        )
-        .join('')}
+      ${projects.map((p) => renderProjectCard(p, ui)).join('')}
     </div>
   `;
 }

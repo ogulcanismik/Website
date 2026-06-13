@@ -38,14 +38,44 @@
 
 /* Projects */
 .project-card {
+  position: relative;
+  overflow: hidden;
   padding: 1.75rem 0 1.75rem 1.25rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--color-border);
   border-left: 2px solid var(--color-accent);
 }
 
+.project-card--has-image::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--project-image);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.project-card--has-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--color-bg) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.project-card__content {
+  position: relative;
+  z-index: 1;
+}
+
 .project-card:first-child {
   padding-top: 0;
+}
+
+.project-card--has-image:first-child {
+  padding-top: 1.75rem;
 }
 
 .project-card--placeholder {

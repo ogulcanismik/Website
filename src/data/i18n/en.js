@@ -86,6 +86,7 @@ export default {
         'Arcade management game built as sole programmer in a multidisciplinary duo during the 48-hour Startgate Game Jam (December 2025). Designed game mechanics and UI systems in Unity. Qualified and ranked among the top entries.',
       tags: ['unity', 'c#', 'game jam'],
       questMeta: { status: 'Shipped', type: 'Game' },
+      image: '/images/keepthepowerup.png',
       github: 'https://github.com/ogulcanismik',
     },
     {
@@ -94,6 +95,7 @@ export default {
       description: 'Placeholder — game project details coming soon.',
       tags: ['unity', 'c#', 'game jam'],
       questMeta: { status: 'Shipped', type: 'Game' },
+      image: '/images/orpheus.png',
       github: 'https://github.com/ogulcanismik',
     },
     {

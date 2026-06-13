@@ -77,6 +77,7 @@ export default {
         '48 saatlik Startgate Game Jam\'inde (Aralık 2025) çok disiplinli bir ikilide tek programcı olarak geliştirilen arcade yönetim oyunu. Unity\'de oyun mekaniği ve arayüz sistemleri tasarlandı. Elemeyi geçerek en iyi girişler arasında yer aldı.',
       tags: ['unity', 'c#', 'game jam'],
       questMeta: { status: 'Yayınlandı', type: 'Oyun' },
+      image: '/images/keepthepowerup.png',
       github: 'https://github.com/ogulcanismik',
     },
     {
