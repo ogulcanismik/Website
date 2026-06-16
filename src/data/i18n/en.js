@@ -16,7 +16,7 @@ export default {
     themeToLight: 'Switch to light mode',
     themeToDark: 'Switch to dark mode',
     menu: {
-      projects: 'Creations',
+      projects: 'Projects',
       about: 'About Me',
       cv: 'CV',
       contact: 'Contact',
@@ -65,17 +65,16 @@ export default {
       'Strategy Games',
       'TTRPG & Storytelling',
       'IoT (Arduino & ESP)',
-      'Clean Energy & Sustainability',
+      '3D Printing',
       'World History',
-      'Art History',
     ],
   },
   projects: [
     {
       id: 'the-double-crime',
       title: 'The Double Crime',
-      description: 'Placeholder — procedural dungeon crawler in early development.',
-      tags: ['unity', 'c#', 'game jam'],
+      description: 'Designed and developed core gameplay mechanics, custom UI systems, and dialogue system in Unity using C# and ink. Created modular and expandable systems with patterns like Singletons and Scriptable Objects.',
+      tags: ['unity', 'c#', 'inky'],
       questMeta: { status: 'In Development', type: 'Game' },
       github: 'https://github.com/ogulcanismik',
     },
@@ -92,7 +91,7 @@ export default {
     {
       id: 'orpheus',
       title: 'Orpheus Unreturned',
-      description: 'Placeholder — game project details coming soon.',
+      description: 'Designed and developed a rogue-like game prototype  with a team of three in a 48-hour Game Jam organized in Yıldız Technical University.',
       tags: ['unity', 'c#', 'game jam'],
       questMeta: { status: 'Shipped', type: 'Game' },
       image: '/images/orpheus.png',
@@ -122,25 +121,9 @@ export default {
       description:
         'Ongoing web scraping system that monitors real-time pricing across multiple e-commerce platforms for personal use. Built with Playwright, SQLite, and automated via GitHub Actions.',
       tags: ['python', 'playwright', 'sqlite', 'github actions'],
-      questMeta: { status: 'Ongoing', type: 'Tool' },
+      questMeta: { status: 'In Development', type: 'Tool' },
       github: 'https://github.com/ogulcanismik',
     },
-    // {
-    //   id: 'barcode-reader',
-    //   title: 'Barcode Reader: Price Comparison App',
-    //   description:
-    //     'Android app that identifies consumer products via barcode scanning. Integrates Google Shopping through SerpApi to aggregate real-time pricing and store details from multiple online retailers.',
-    //   tags: ['java', 'android studio', 'serpapi'],
-    //   github: 'https://github.com/ogulcanismik',
-    // },
-    // {
-    //   id: 'linux-scheduler',
-    //   title: 'Linux Kernel Modification',
-    //   description:
-    //     'Modified the Linux 2.4 kernel to implement a Lottery Scheduler as a process prioritization algorithm. Integrated a new system call to manage and monitor process states at the kernel level.',
-    //   tags: ['c', 'linux'],
-    //   github: 'https://github.com/ogulcanismik',
-    // },
   ],
   resume: {
     pdfUrl: '/assets/cv/resume.pdf',
