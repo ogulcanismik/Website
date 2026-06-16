@@ -76,7 +76,7 @@ export default {
       description: 'Designed and developed core gameplay mechanics, custom UI systems, and dialogue system in Unity using C# and ink. Created modular and expandable systems with patterns like Singletons and Scriptable Objects.',
       tags: ['unity', 'c#', 'inky'],
       questMeta: { status: 'In Development', type: 'Game' },
-      image: '/images/doublecrime.jpg',
+      image: '/images/doublecrime.png',
       github: 'https://github.com/ogulcanismik',
     },
     {
