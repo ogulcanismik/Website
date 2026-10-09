@@ -1,0 +1,221 @@
+[
+  {
+    "id": "the-double-crime",
+    "image": "/images/doublecrime.png",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": false,
+    "locales": [
+      "en",
+      "tr"
+    ],
+    "tags": [
+      "unity",
+      "c#",
+      "inky"
+    ],
+    "en": {
+      "title": "The Double Crime",
+      "description": "Designed and developed core gameplay mechanics, custom UI systems, and dialogue system in Unity using C# and ink. Created modular and expandable systems with patterns like Singletons and Scriptable Objects.",
+      "status": "In Development",
+      "type": "Game"
+    },
+    "tr": {
+      "title": "The Double Crime",
+      "description": "Unity'de C# ve ink kullanarak temel oynanış mekaniklerini, özel arayüz sistemlerini ve diyalog sistemini tasarladım ve geliştirdim. Singleton ve Scriptable Object gibi desenlerle modüler ve genişletilebilir sistemler kurdum.",
+      "status": "Geliştiriliyor",
+      "type": "Oyun"
+    }
+  },
+  {
+    "id": "keep-the-power-up",
+    "image": "/images/keepthepowerup.png",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": false,
+    "locales": [
+      "en",
+      "tr"
+    ],
+    "tags": [
+      "unity",
+      "c#",
+      "game jam"
+    ],
+    "en": {
+      "title": "Keep The Power Up",
+      "description": "Arcade management game built as sole programmer in a multidisciplinary duo during the 48-hour Startgate Game Jam (December 2025). Designed game mechanics and UI systems in Unity. Qualified and ranked among the top entries.",
+      "status": "Shipped",
+      "type": "Game"
+    },
+    "tr": {
+      "title": "Keep The Power Up",
+      "description": "48 saatlik Startgate Game Jam'inde (Aralık 2025) çok disiplinli bir ikilide tek programcı olarak geliştirilen arcade yönetim oyunu. Unity'de oyun mekaniği ve arayüz sistemleri tasarlandı. Elemeyi geçerek en iyi girişler arasında yer aldı.",
+      "status": "Yayınlandı",
+      "type": "Oyun"
+    }
+  },
+  {
+    "id": "orpheus",
+    "image": "/images/orpheus.png",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": false,
+    "locales": [
+      "en",
+      "tr"
+    ],
+    "tags": [
+      "unity",
+      "c#",
+      "game jam"
+    ],
+    "en": {
+      "title": "Orpheus Unreturned",
+      "description": "Designed and developed a rogue-like game prototype with a team of three in a 48-hour Game Jam organized in Yıldız Technical University.",
+      "status": "Shipped",
+      "type": "Game"
+    },
+    "tr": {
+      "title": "Orpheus Unreturned",
+      "description": "Yıldız Teknik Üniversitesi'nde düzenlenen 48 saatlik Game Jam'de üç kişilik bir ekiple rogue-like oyun prototipi tasarladım ve geliştirdim.",
+      "status": "Yayınlandı",
+      "type": "Oyun"
+    }
+  },
+  {
+    "id": "game-placeholder-1",
+    "image": "",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": true,
+    "locales": [
+      "tr"
+    ],
+    "tags": [
+      "unity",
+      "c#"
+    ],
+    "en": {
+      "title": "Untitled Game Project",
+      "description": "Placeholder — game project details coming soon.",
+      "status": "In Development",
+      "type": "Game"
+    },
+    "tr": {
+      "title": "İsimsiz Oyun Projesi",
+      "description": "Yer tutucu — oyun projesi detayları yakında eklenecek.",
+      "status": "Geliştiriliyor",
+      "type": "Oyun"
+    }
+  },
+  {
+    "id": "game-placeholder-2",
+    "image": "",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": true,
+    "locales": [
+      "tr"
+    ],
+    "tags": [
+      "unity",
+      "procedural generation"
+    ],
+    "en": {
+      "title": "Dungeon Crawler Prototype",
+      "description": "Placeholder — procedural dungeon crawler in early development.",
+      "status": "In Development",
+      "type": "Game"
+    },
+    "tr": {
+      "title": "Zindan Gezgini Prototipi",
+      "description": "Yer tutucu — prosedürel zindan gezgini erken geliştirme aşamasında.",
+      "status": "Geliştiriliyor",
+      "type": "Oyun"
+    }
+  },
+  {
+    "id": "attendance-dice",
+    "image": "",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": false,
+    "locales": [
+      "en",
+      "tr"
+    ],
+    "tags": [
+      "flutter",
+      "dart",
+      "ttrpg"
+    ],
+    "en": {
+      "title": "Attendance Tracker & TTRPG Dice Engine",
+      "description": "Built during internship at MaviPiksel using Flutter and Dart — an attendance tracking system and a TTRPG dice engine with frontend integration in a professional environment.",
+      "status": "Shipped",
+      "type": "Tool"
+    },
+    "tr": {
+      "title": "Yoklama Takip & TTRPG Zar Motoru",
+      "description": "MaviPiksel stajında Flutter ve Dart kullanılarak geliştirildi — profesyonel ortamda frontend entegrasyonlu yoklama takip sistemi ve TTRPG zar motoru.",
+      "status": "Yayınlandı",
+      "type": "Araç"
+    }
+  },
+  {
+    "id": "tetris-engine",
+    "image": "",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": false,
+    "locales": [
+      "en",
+      "tr"
+    ],
+    "tags": [
+      "c"
+    ],
+    "en": {
+      "title": "Classic Tetris Engine",
+      "description": "Fully functional console Tetris game in pure C with efficient game loop logic, real-time user input handling, and collision detection — no external libraries.",
+      "status": "Shipped",
+      "type": "Game"
+    },
+    "tr": {
+      "title": "Klasik Tetris Motoru",
+      "description": "Harici kütüphane kullanmadan saf C ile yazılmış, verimli oyun döngüsü, gerçek zamanlı kullanıcı girişi ve çarpışma algılama algoritmalarına sahip tam işlevsel konsol Tetris oyunu.",
+      "status": "Yayınlandı",
+      "type": "Oyun"
+    }
+  },
+  {
+    "id": "price-scraper",
+    "image": "",
+    "link": "",
+    "github": "https://github.com/ogulcanismik",
+    "placeholder": false,
+    "locales": [
+      "en",
+      "tr"
+    ],
+    "tags": [
+      "python",
+      "playwright",
+      "sqlite",
+      "github actions"
+    ],
+    "en": {
+      "title": "3D Printer Price Scraper & Tracker",
+      "description": "Ongoing web scraping system that monitors real-time pricing across multiple e-commerce platforms for personal use. Built with Playwright, SQLite, and automated via GitHub Actions.",
+      "status": "In Development",
+      "type": "Tool"
+    },
+    "tr": {
+      "title": "3D Yazıcı Fiyat Takipçisi",
+      "description": "Kişisel kullanım için birden fazla e-ticaret platformundaki gerçek zamanlı fiyatları izleyen devam eden bir web kazıma sistemi. Playwright, SQLite ve GitHub Actions ile otomatikleştirildi.",
+      "status": "Devam Ediyor",
+      "type": "Araç"
+    }
+  }
+]

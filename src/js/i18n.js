@@ -1,7 +1,9 @@
 import en from '../data/i18n/en.js';
 import tr from '../data/i18n/tr.js';
+import projectsData from '../../content/projects.json';
 import { refreshThemeToggle } from './theme.js';
 import { parseNameParts } from './name-parts.js';
+import { projectsForLocale } from './projects-content.js';
 
 const locales = { en, tr };
 const STORAGE_KEY = 'locale';
@@ -18,7 +20,11 @@ export function getLocale() {
 }
 
 export function getContent() {
-  return locales[currentLocale];
+  const base = locales[currentLocale];
+  return {
+    ...base,
+    projects: projectsForLocale(projectsData, currentLocale),
+  };
 }
 
 function resolveSocialLabel(social, ui) {

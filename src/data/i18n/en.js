@@ -69,63 +69,6 @@ export default {
       'World History',
     ],
   },
-  projects: [
-    {
-      id: 'the-double-crime',
-      title: 'The Double Crime',
-      description: 'Designed and developed core gameplay mechanics, custom UI systems, and dialogue system in Unity using C# and ink. Created modular and expandable systems with patterns like Singletons and Scriptable Objects.',
-      tags: ['unity', 'c#', 'inky'],
-      questMeta: { status: 'In Development', type: 'Game' },
-      image: '/images/doublecrime.png',
-      github: 'https://github.com/ogulcanismik',
-    },
-    {
-      id: 'keep-the-power-up',
-      title: 'Keep The Power Up',
-      description:
-        'Arcade management game built as sole programmer in a multidisciplinary duo during the 48-hour Startgate Game Jam (December 2025). Designed game mechanics and UI systems in Unity. Qualified and ranked among the top entries.',
-      tags: ['unity', 'c#', 'game jam'],
-      questMeta: { status: 'Shipped', type: 'Game' },
-      image: '/images/keepthepowerup.png',
-      github: 'https://github.com/ogulcanismik',
-    },
-    {
-      id: 'orpheus',
-      title: 'Orpheus Unreturned',
-      description: 'Designed and developed a rogue-like game prototype  with a team of three in a 48-hour Game Jam organized in Yıldız Technical University.',
-      tags: ['unity', 'c#', 'game jam'],
-      questMeta: { status: 'Shipped', type: 'Game' },
-      image: '/images/orpheus.png',
-      github: 'https://github.com/ogulcanismik',
-    },
-    {
-      id: 'attendance-dice',
-      title: 'Attendance Tracker & TTRPG Dice Engine',
-      description:
-        'Built during internship at MaviPiksel using Flutter and Dart — an attendance tracking system and a TTRPG dice engine with frontend integration in a professional environment.',
-      tags: ['flutter', 'dart'],
-      questMeta: { status: 'Shipped', type: 'Tool' },
-      github: 'https://github.com/ogulcanismik',
-    },
-    {
-      id: 'tetris-engine',
-      title: 'Classic Tetris Engine',
-      description:
-        'Fully functional console Tetris game in pure C with efficient game loop logic, real-time user input handling, and collision detection — no external libraries.',
-      tags: ['c'],
-      questMeta: { status: 'Shipped', type: 'Game' },
-      github: 'https://github.com/ogulcanismik',
-    },
-    {
-      id: 'price-scraper',
-      title: '3D Printer Price Scraper & Tracker',
-      description:
-        'Ongoing web scraping system that monitors real-time pricing across multiple e-commerce platforms for personal use. Built with Playwright, SQLite, and automated via GitHub Actions.',
-      tags: ['python', 'playwright', 'sqlite', 'github actions'],
-      questMeta: { status: 'In Development', type: 'Tool' },
-      github: 'https://github.com/ogulcanismik',
-    },
-  ],
   resume: {
     pdfUrl: '/assets/cv/resume.pdf',
     experience: [

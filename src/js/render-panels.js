@@ -1,27 +1,42 @@
 import { getContent, resolveSocialLabel } from './i18n.js';
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function projectImageStyle(image) {
+  if (!image || !/^(\/|https?:\/\/)/.test(image)) return '';
+  const safe = escapeHtml(encodeURI(image));
+  return ` style="--project-image: url('${safe}')"`;
+}
+
 function renderQuestMeta(p) {
   if (!p.questMeta) return '';
   const { status, type } = p.questMeta;
-  return `<p class="project-card__meta">// ${status} · ${type}</p>`;
+  return `<p class="project-card__meta">// ${escapeHtml(status)} · ${escapeHtml(type)}</p>`;
 }
 
 function renderProjectCard(p, ui) {
-  const imageStyle = p.image ? ` style="--project-image: url('${p.image}')"` : '';
+  const imageStyle = projectImageStyle(p.image);
   const imageClass = p.image ? ' project-card--has-image' : '';
 
   return `
-        <article class="project-card${imageClass}${p.placeholder ? ' project-card--placeholder' : ''}" id="${p.id}"${imageStyle}>
+        <article class="project-card${imageClass}${p.placeholder ? ' project-card--placeholder' : ''}" id="${escapeHtml(p.id)}"${imageStyle}>
           <div class="project-card__content">
             ${renderQuestMeta(p)}
-            <h3 class="project-card__title">${p.title}</h3>
-            <p class="project-card__description">${p.description}</p>
+            <h3 class="project-card__title">${escapeHtml(p.title)}</h3>
+            <p class="project-card__description">${escapeHtml(p.description)}</p>
             <div class="project-card__tags">
-              ${p.tags.map((tag) => `<span class="project-card__tag">${tag}</span>`).join('')}
+              ${p.tags.map((tag) => `<span class="project-card__tag">${escapeHtml(tag)}</span>`).join('')}
             </div>
             <div class="project-card__links">
-              ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer">${ui.links.live}</a>` : ''}
-              ${p.github ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer">${ui.links.github}</a>` : ''}
+              ${p.link ? `<a href="${escapeHtml(p.link)}" target="_blank" rel="noopener noreferrer">${ui.links.live}</a>` : ''}
+              ${p.github ? `<a href="${escapeHtml(p.github)}" target="_blank" rel="noopener noreferrer">${ui.links.github}</a>` : ''}
             </div>
           </div>
         </article>
