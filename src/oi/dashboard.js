@@ -374,6 +374,10 @@ async function loadProjects() {
   renderApp();
 }
 
-const session = await api('/api/auth').catch(() => ({ ok: false }));
-if (session.ok) await loadProjects();
-else renderLogin();
+async function boot() {
+  const session = await api('/api/auth').catch(() => ({ ok: false }));
+  if (session.ok) await loadProjects();
+  else renderLogin();
+}
+
+boot();
