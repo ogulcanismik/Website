@@ -6,9 +6,9 @@ export function dashboardApiPlugin() {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url?.split('?')[0];
-        if (url === '/oi') {
+        if (url === '/oi' || url === '/privacy/deneme_takip') {
           res.statusCode = 302;
-          res.setHeader('Location', '/oi/');
+          res.setHeader('Location', `${url}/`);
           res.end();
           return;
         }

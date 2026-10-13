@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
         input: {
           main: 'index.html',
           oi: 'oi/index.html',
+          privacyDenemeTakip: 'privacy/deneme_takip/index.html',
         },
       },
     },
