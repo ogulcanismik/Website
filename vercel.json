@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/oi", "destination": "/oi/index.html" },
+    { "source": "/occupancy", "destination": "/occupancy/index.html" },
     { "source": "/privacy/deneme_takip", "destination": "/privacy/deneme_takip/index.html" }
   ]
 }

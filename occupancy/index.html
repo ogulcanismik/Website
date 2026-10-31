@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Occupancy dashboard</title>
+    <meta
+      name="description"
+      content="Live room headcount from three ESP32 nodes. Counts only. Device addresses stay on the local backend."
+    />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Outfit:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./dashboard.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+            <circle cx="18" cy="8" r="4" class="mark-people" />
+            <circle cx="8" cy="26" r="4" class="mark-node" />
+            <circle cx="28" cy="26" r="4" class="mark-node" />
+          </svg>
+          <div>
+            <h1>Indoor occupancy</h1>
+            <p>Three ESP32 nodes · 2-of-3 RSSI vote · addresses stay on the server</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <div class="segment" role="group" aria-label="Data source">
+            <button type="button" data-mode="live" aria-pressed="true">Live</button>
+            <button type="button" data-mode="demo" aria-pressed="false">Demo</button>
+          </div>
+          <span id="badge" class="badge demo">No API</span>
+        </div>
+      </header>
+      <p id="status-note" class="status-note">This room is simulated.</p>
+
+      <section class="hero">
+        <article class="hero-card">
+          <p class="eyebrow">People in the room</p>
+          <p id="headcount" class="hero-value" aria-live="polite">—</p>
+          <p class="hero-unit">Estimated headcount</p>
+          <p id="updated" class="updated">Waiting for the first sample</p>
+        </article>
+
+        <article class="formula-card">
+          <p class="eyebrow">Headcount mapping</p>
+          <p id="formula" class="formula">round( slope × (devices − dara) + intercept )</p>
+          <p class="formula-result">= <span id="formula-result">—</span></p>
+          <dl class="cal-grid">
+            <div>
+              <dt>Slope</dt>
+              <dd id="slope">—</dd>
+            </div>
+            <div>
+              <dt>Dara offset</dt>
+              <dd id="offset">—</dd>
+            </div>
+            <div>
+              <dt>Intercept</dt>
+              <dd id="intercept">—</dd>
+            </div>
+          </dl>
+          <p class="cal-note">
+            Dara is the empty-room device count. It is subtracted before the line maps devices to people.
+          </p>
+        </article>
+      </section>
+
+      <section class="stats" aria-label="Room summary">
+        <article class="stat">
+          <p class="eyebrow">Active devices</p>
+          <p id="active" class="stat-value teal">—</p>
+          <p>Inside after the Redis window</p>
+        </article>
+        <article class="stat">
+          <p class="eyebrow">Rejected</p>
+          <p id="rejected" class="stat-value">—</p>
+          <p>Seen by fewer than 2 nodes</p>
+        </article>
+        <article class="stat">
+          <p class="eyebrow">Nodes online</p>
+          <p id="nodes-online" class="stat-value">—</p>
+          <p id="vote-line">Vote needs 2 of 3</p>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>History</h2>
+            <p class="panel-sub">People from the line, and the device count that fed it.</p>
+          </div>
+          <div class="segment" role="group" aria-label="History window">
+            <button type="button" data-hours="1" aria-pressed="false">1h</button>
+            <button type="button" data-hours="6" aria-pressed="true">6h</button>
+            <button type="button" data-hours="24" aria-pressed="false">24h</button>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <p id="chart-empty" class="chart-empty" hidden>Waiting for samples.</p>
+          <svg
+            id="chart"
+            class="chart-svg"
+            viewBox="0 0 800 280"
+            role="img"
+            aria-label="Occupancy history"
+          ></svg>
+          <div id="chart-tip" class="chart-tip" hidden>
+            <div id="tip-time" class="tip-time"></div>
+            <div><i class="swatch people"></i> <span id="tip-people"></span></div>
+            <div><i class="swatch devices"></i> <span id="tip-devices"></span></div>
+          </div>
+        </div>
+        <div class="legend">
+          <span><i class="swatch people"></i> People</span>
+          <span><i class="swatch devices"></i> Active devices</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Nodes</h2>
+            <p class="panel-sub">Last Wi-Fi probe batch and BLE advert batch on each ESP32.</p>
+          </div>
+        </div>
+        <div id="nodes" class="nodes"></div>
+      </section>
+
+      <footer class="pipeline">
+        ESP32 time-slice (Wi-Fi probes, then BLE) → batch JSON POST → 2-of-3 RSSI vote → Redis
+        sliding window → dara offset → linear headcount
+      </footer>
+    </div>
+    <script type="module" src="./dashboard.js"></script>
+  </body>
+</html>
