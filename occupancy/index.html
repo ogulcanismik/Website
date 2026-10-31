@@ -51,7 +51,7 @@
 
         <article class="formula-card">
           <p class="eyebrow">Headcount mapping</p>
-          <p id="formula" class="formula">round( slope × (devices − dara) + intercept )</p>
+          <p id="formula" class="formula">round( slope × (devices − background) + intercept )</p>
           <p class="formula-result">= <span id="formula-result">—</span></p>
           <dl class="cal-grid">
             <div>
@@ -59,7 +59,7 @@
               <dd id="slope">—</dd>
             </div>
             <div>
-              <dt>Dara offset</dt>
+              <dt>Background offset</dt>
               <dd id="offset">—</dd>
             </div>
             <div>
@@ -68,7 +68,7 @@
             </div>
           </dl>
           <p class="cal-note">
-            Dara is the empty-room device count. It is subtracted before the line maps devices to people.
+            Background is the empty-room device count. It is subtracted before the line maps devices to people.
           </p>
         </article>
       </section>
@@ -136,7 +136,7 @@
 
       <footer class="pipeline">
         ESP32 time-slice (Wi-Fi probes, then BLE) → batch JSON POST → 2-of-3 RSSI vote → Redis
-        sliding window → dara offset → linear headcount
+        sliding window → background offset → linear headcount
       </footer>
     </div>
     <script type="module" src="./dashboard.js"></script>
