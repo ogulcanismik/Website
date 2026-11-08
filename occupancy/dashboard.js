@@ -2,8 +2,9 @@
  * dashboard.js
  * Doluluk panosu. HTML iskeletini doldurur; React yok.
  *
- * FastAPI adresi. Bos birakilirsa sayfa simule oda gosterir.
- * Ornek: const API_BASE = 'http://192.168.1.100:8000';
+ * FastAPI Fly'da. Bos birakilirsa sayfa simule oda gosterir.
+ * Panel: https://ogulcanismik.com/occupancy
+ * API:   https://winter-sunrise-5707.fly.dev
  *
  * GET  {API}/occupancy/current
  * GET  {API}/occupancy/history?hours=24
@@ -16,7 +17,7 @@
  * nodes:   { nodes: [ { node_id, online, last_seen, wifi_sightings, ble_sightings } ] }
  * MAC alani yok. Tarayici baska origin'den cagirirsa FastAPI CORS acmali.
  */
-const API_BASE = '';
+const API_BASE = 'https://winter-sunrise-5707.fly.dev';
 
 // WIFI_FULL / BLE_FULL: cubuk %100 sayilan gozlem adedi (son batch).
 const WIFI_FULL = 24;
