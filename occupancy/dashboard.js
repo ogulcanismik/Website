@@ -293,6 +293,7 @@ function normalizeCurrent(raw) {
     nodeCount: num(body.node_count, 3),
     nodesOnline: num(body.nodes_online, 0),
     updatedAt: body.updated_at || new Date().toISOString(),
+    teachingSamples: num(body.teaching_samples, 0),
   };
 }
 
@@ -815,6 +816,7 @@ function paint() {
     document.getElementById('intercept').textContent = fmt(current.intercept);
   }
 
+  paintTeaching(current);
   drawChart();
   drawNodes(!room);
 }
@@ -937,6 +939,85 @@ function onChartMove(event) {
 }
 
 /*
+ * teachNote
+ * Kac ders kayitli. 3'ten once varsayilan dogru, sonra tum dersler uydurulur.
+ */
+function teachNote(samples) {
+  const count = num(samples, 0);
+  if (count < 1) {
+    return 'No lessons yet. The default line stays until 3 counts are saved.';
+  }
+  if (count < 3) {
+    return count + ' saved. ' + (3 - count) + ' more until the line is fit to your counts.';
+  }
+  return count + ' lessons. The line is fit to all of them. More counts improve the fit.';
+}
+
+/*
+ * paintTeaching
+ * Canli degilken form kapali. Canliyken ders sayisini yazar.
+ */
+function paintTeaching(current) {
+  const note = document.getElementById('teach-note');
+  const button = document.getElementById('teach-save');
+  const input = document.getElementById('teach-people');
+  if (!note || !button || !input) {
+    return;
+  }
+  const live = mode === 'live' && status === 'live';
+  button.disabled = !live;
+  input.disabled = !live;
+  if (!live) {
+    note.textContent = 'Switch to Live, then count the people actually in the room.';
+    return;
+  }
+  note.textContent = teachNote(current ? current.teachingSamples : 0);
+}
+
+/*
+ * saveLesson
+ * POST /calibration/sample. Sunucu o anki cihaz sayisi ile kisiyi kaydeder ve dogruyu yeniler.
+ */
+async function saveLesson(event) {
+  event.preventDefault();
+  const note = document.getElementById('teach-note');
+  const button = document.getElementById('teach-save');
+  const input = document.getElementById('teach-people');
+  const people = Number(input.value);
+  if (!API_BASE || mode !== 'live' || status !== 'live') {
+    note.textContent = 'Switch to Live, then count the people actually in the room.';
+    return;
+  }
+  if (!Number.isFinite(people) || people < 0 || people > 500) {
+    note.textContent = 'Enter a count from 0 to 500.';
+    return;
+  }
+  button.disabled = true;
+  note.textContent = 'Saving this count against the current device reading.';
+  const ctrl = new AbortController();
+  const timer = setTimeout(function () {
+    ctrl.abort();
+  }, 15000);
+  try {
+    const res = await fetch(API_BASE + '/calibration/sample', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ people: Math.round(people) }),
+      signal: ctrl.signal,
+    });
+    if (!res.ok) {
+      throw new Error('HTTP ' + res.status);
+    }
+    await pull();
+  } catch (err) {
+    note.textContent = 'The count was not saved. The API did not answer.';
+    button.disabled = false;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/*
  * bindControls
  * Live/Demo ve 1s/6s/24s dugmeleri. Grafik fare ve dokunmatik okumasi.
  */
@@ -964,6 +1045,12 @@ function bindControls() {
   });
   chart.addEventListener('touchstart', onChartMove, { passive: true });
   chart.addEventListener('touchmove', onChartMove, { passive: true });
+  const teachForm = document.getElementById('teach-form');
+  if (teachForm) {
+    teachForm.addEventListener('submit', function (event) {
+      saveLesson(event);
+    });
+  }
 }
 
 bindControls();

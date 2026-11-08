@@ -517,3 +517,42 @@ button:focus-visible {
     box-shadow: none;
   }
 }
+
+.teach-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-end;
+  margin-top: 4px;
+}
+
+.teach-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.teach-form input {
+  width: 8rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.teach-form button {
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 16px;
+  background: var(--gold);
+  color: #2a2112;
+  cursor: pointer;
+}
+
+.teach-form button:disabled,
+.teach-form input:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

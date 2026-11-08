@@ -72,6 +72,23 @@
         </article>
       </section>
 
+      <section class="panel" id="teach-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Teaching</h2>
+            <p class="panel-sub">Count the people in the room and save. Each save is one lesson for the line.</p>
+          </div>
+        </div>
+        <form id="teach-form" class="teach-form">
+          <label for="teach-people">
+            People in the room now
+            <input id="teach-people" type="number" min="0" max="500" step="1" value="0" required />
+          </label>
+          <button type="submit" id="teach-save">Save count</button>
+        </form>
+        <p id="teach-note" class="cal-note">The default line stays until 3 counts are saved.</p>
+      </section>
+
       <section class="stats" aria-label="Room summary">
         <article class="stat">
           <p class="eyebrow">Active devices</p>
