@@ -551,6 +551,12 @@ button:focus-visible {
   cursor: pointer;
 }
 
+.teach-form button.teach-reset {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
 .teach-form button:disabled,
 .teach-form input:disabled {
   opacity: 0.45;

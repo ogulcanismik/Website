@@ -960,6 +960,7 @@ function teachNote(samples) {
 function paintTeaching(current) {
   const note = document.getElementById('teach-note');
   const button = document.getElementById('teach-save');
+  const reset = document.getElementById('teach-reset');
   const input = document.getElementById('teach-people');
   if (!note || !button || !input) {
     return;
@@ -967,6 +968,9 @@ function paintTeaching(current) {
   const live = mode === 'live' && status === 'live';
   button.disabled = !live;
   input.disabled = !live;
+  if (reset) {
+    reset.disabled = !live;
+  }
   if (!live) {
     note.textContent = 'Switch to Live, then count the people actually in the room.';
     return;
@@ -1018,6 +1022,40 @@ async function saveLesson(event) {
 }
 
 /*
+ * resetLessons
+ * POST /calibration/reset. Dersler silinir, dogru varsayilana doner. Grafik durur.
+ */
+async function resetLessons() {
+  const note = document.getElementById('teach-note');
+  const reset = document.getElementById('teach-reset');
+  if (!API_BASE || mode !== 'live' || status !== 'live') {
+    note.textContent = 'Switch to Live before resetting the lessons.';
+    return;
+  }
+  reset.disabled = true;
+  note.textContent = 'Clearing the saved lessons.';
+  const ctrl = new AbortController();
+  const timer = setTimeout(function () {
+    ctrl.abort();
+  }, 15000);
+  try {
+    const res = await fetch(API_BASE + '/calibration/reset', {
+      method: 'POST',
+      signal: ctrl.signal,
+    });
+    if (!res.ok) {
+      throw new Error('HTTP ' + res.status);
+    }
+    await pull();
+  } catch (err) {
+    note.textContent = 'The lessons were not cleared. The API did not answer.';
+    reset.disabled = false;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/*
  * bindControls
  * Live/Demo ve 1s/6s/24s dugmeleri. Grafik fare ve dokunmatik okumasi.
  */
@@ -1049,6 +1087,12 @@ function bindControls() {
   if (teachForm) {
     teachForm.addEventListener('submit', function (event) {
       saveLesson(event);
+    });
+  }
+  const teachReset = document.getElementById('teach-reset');
+  if (teachReset) {
+    teachReset.addEventListener('click', function () {
+      resetLessons();
     });
   }
 }
