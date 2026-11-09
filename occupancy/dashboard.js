@@ -37,8 +37,15 @@ const CHART_PAD = { l: 40, r: 12, t: 16, b: 32 };
 
 // mode: "live" backend dener, "demo" simule odayi zorlar.
 let mode = 'live';
-// hours: grafik penceresi (saat).
-let hours = 6;
+// presetHours: hazir pencere (saat). 168 = 1 hafta, 720 = 30 gun.
+let presetHours = 6;
+// rangeMode: "preset" veya "custom" (iki tarih arasi).
+let rangeMode = 'preset';
+// rangeStart / rangeEnd: custom pencere, yerel gun sinirlari (milisaniye).
+let rangeStart = null;
+let rangeEnd = null;
+// HISTORY_KEEP_MS: bellekte tutulan en uzun gecmis (31 gun).
+const HISTORY_KEEP_MS = 31 * 24 * 60 * 60 * 1000;
 let status = API_BASE ? 'connecting' : 'unconfigured';
 let room = null;
 let hoverIndex = null;
@@ -116,9 +123,13 @@ function formatAgo(isoOrMs) {
  * 12 saatten uzun pencerede gun + saat. spanMs: pencere genisligi.
  */
 function formatAxis(ms, spanMs) {
+  const date = new Date(ms);
+  const day = date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  if (spanMs > 2 * 24 * 60 * 60 * 1000) {
+    return day;
+  }
   const clock = formatClock(ms);
   if (spanMs > 12 * 60 * 60 * 1000) {
-    const day = new Date(ms).toLocaleDateString([], { month: 'short', day: 'numeric' });
     return day + ' ' + clock;
   }
   return clock;
@@ -214,12 +225,12 @@ function buildNodes(activeDevices, nowMs) {
 
 /*
  * createDemoRoom
- * Son 24 saat, 5 dakikalik ornekler. Grafik bos acilmasin.
+ * Son 31 gun, 30 dakikalik ornekler. Hafta ve ay pencereleri bos kalmasin.
  */
 function createDemoRoom() {
   const now = Date.now();
-  const stepMs = 5 * 60 * 1000;
-  const count = (24 * 60) / 5;
+  const stepMs = 30 * 60 * 1000;
+  const count = Math.round(HISTORY_KEEP_MS / stepMs);
   const points = [];
   for (let i = count - 1; i >= 0; i--) {
     const t = now - i * stepMs;
@@ -240,7 +251,7 @@ function createDemoRoom() {
 
 /*
  * stepDemo
- * Cihaz sayisini gun egrisina dogru 1 adim kaydirir. 24 saatten eskileri atar.
+ * Cihaz sayisini gun egrisina dogru 1 adim kaydirir. 31 gunden eskileri atar.
  */
 function stepDemo(prev) {
   const now = Date.now();
@@ -256,7 +267,7 @@ function stepDemo(prev) {
     active = 0;
   }
   const current = buildCurrent(active, now);
-  const cutoff = now - 24 * 60 * 60 * 1000;
+  const cutoff = now - HISTORY_KEEP_MS;
   const points = [];
   const previousPoints = prev && prev.points ? prev.points : [];
   for (let i = 0; i < previousPoints.length; i++) {
@@ -348,7 +359,7 @@ async function getJson(url) {
 
 /*
  * fetchSnapshot
- * Anlik sayim + 24 saat gecmis + 3 node.
+ * Anlik sayim + 31 gun gecmis + 3 node.
  */
 async function fetchSnapshot(apiBase, historyHours) {
   const currentJson = await getJson(apiBase + '/occupancy/current');
@@ -384,7 +395,7 @@ function applyLiveMessage(prev, msg) {
     headcount: current.headcount,
     activeDevices: current.activeDevices,
   };
-  const cutoff = stamp - 24 * 60 * 60 * 1000;
+  const cutoff = stamp - HISTORY_KEEP_MS;
   const points = [];
   const previous = prev.points || [];
   for (let i = 0; i < previous.length; i++) {
@@ -441,17 +452,76 @@ function lineValue(current) {
 }
 
 /*
+ * dayStart
+ * "YYYY-MM-DD" degerini yerel gunun basina (00:00) cevirir. Milisaniye.
+ */
+function dayStart(value) {
+  const parts = String(value || '').split('-');
+  if (parts.length !== 3) {
+    return null;
+  }
+  const year = Number(parts[0]);
+  const month = Number(parts[1]);
+  const day = Number(parts[2]);
+  if (!year || !month || !day) {
+    return null;
+  }
+  return new Date(year, month - 1, day, 0, 0, 0, 0).getTime();
+}
+
+/*
+ * dayEnd
+ * Secilen gunun son anı. Bitis tarihi grafige dahil kalsin.
+ */
+function dayEnd(value) {
+  const start = dayStart(value);
+  if (start === null) {
+    return null;
+  }
+  return start + 24 * 60 * 60 * 1000 - 1;
+}
+
+/*
+ * toInputDate
+ * Date nesnesini input[type=date] degerine cevirir.
+ */
+function toInputDate(date) {
+  const month = String(date.getMonth() + 1);
+  const day = String(date.getDate());
+  const mm = month.length < 2 ? '0' + month : month;
+  const dd = day.length < 2 ? '0' + day : day;
+  return date.getFullYear() + '-' + mm + '-' + dd;
+}
+
+/*
+ * windowBounds
+ * Grafik penceresi. Preset simdiden geriye sayar. Custom iki takvim gununu kapsar.
+ * Donus: { start, end } milisaniye.
+ */
+function windowBounds() {
+  if (rangeMode === 'custom' && rangeStart !== null && rangeEnd !== null) {
+    return { start: rangeStart, end: rangeEnd };
+  }
+  const end = Date.now();
+  return {
+    start: end - presetHours * 60 * 60 * 1000,
+    end: end,
+  };
+}
+
+/*
  * visiblePoints
- * 24 saatlik diziden secilen saati keser.
+ * Tutulan gecmisten secilen pencereyi keser.
  */
 function visiblePoints() {
   if (!room) {
     return [];
   }
-  const cutoff = Date.now() - hours * 60 * 60 * 1000;
+  const bounds = windowBounds();
   const visible = [];
   for (let i = 0; i < room.points.length; i++) {
-    if (room.points[i].t >= cutoff) {
+    const t = room.points[i].t;
+    if (t >= bounds.start && t <= bounds.end) {
       visible.push(room.points[i]);
     }
   }
@@ -518,6 +588,7 @@ function drawChart() {
   svg.replaceChildren();
 
   if (points.length < 2) {
+    empty.textContent = rangeMode === 'custom' ? 'No samples in this date range.' : 'Waiting for samples.';
     empty.hidden = false;
     svg.hidden = true;
     tip.hidden = true;
@@ -781,8 +852,16 @@ function paint() {
   }
   const hourButtons = document.querySelectorAll('[data-hours]');
   for (let i = 0; i < hourButtons.length; i++) {
-    const on = Number(hourButtons[i].getAttribute('data-hours')) === hours;
+    const on = rangeMode === 'preset' && Number(hourButtons[i].getAttribute('data-hours')) === presetHours;
     hourButtons[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  const rangeForm = document.getElementById('range-form');
+  if (rangeForm) {
+    if (rangeMode === 'custom') {
+      rangeForm.classList.add('is-active');
+    } else {
+      rangeForm.classList.remove('is-active');
+    }
   }
 
   const current = room ? room.current : null;
@@ -850,7 +929,7 @@ function beginDemo(nextStatus) {
  * REST anlik + gecmis + node. Basarida demo sayacini keser ve soketi acar.
  */
 async function pull() {
-  const snap = await fetchSnapshot(API_BASE, 24);
+  const snap = await fetchSnapshot(API_BASE, 31 * 24);
   stopDemo();
   room = snap;
   status = 'live';
@@ -1056,8 +1135,32 @@ async function resetLessons() {
 }
 
 /*
+ * applyCustomRange
+ * From/To takvim gunlerini grafik penceresi yapar. Ters sirada yazilirsa yer degistirir.
+ */
+function applyCustomRange(event) {
+  event.preventDefault();
+  const fromValue = document.getElementById('range-from').value;
+  const toValue = document.getElementById('range-to').value;
+  let start = dayStart(fromValue);
+  let end = dayEnd(toValue);
+  if (start === null || end === null) {
+    return;
+  }
+  if (start > end) {
+    start = dayStart(toValue);
+    end = dayEnd(fromValue);
+  }
+  rangeMode = 'custom';
+  rangeStart = start;
+  rangeEnd = end;
+  hoverIndex = null;
+  paint();
+}
+
+/*
  * bindControls
- * Live/Demo ve 1s/6s/24s dugmeleri. Grafik fare ve dokunmatik okumasi.
+ * Live/Demo, hazir pencereler ve tarih araligi. Grafik fare ve dokunmatik okumasi.
  */
 function bindControls() {
   const modeButtons = document.querySelectorAll('[data-mode]');
@@ -1070,10 +1173,19 @@ function bindControls() {
   const hourButtons = document.querySelectorAll('[data-hours]');
   for (let i = 0; i < hourButtons.length; i++) {
     hourButtons[i].addEventListener('click', function (event) {
-      hours = Number(event.currentTarget.getAttribute('data-hours'));
+      presetHours = Number(event.currentTarget.getAttribute('data-hours'));
+      rangeMode = 'preset';
       hoverIndex = null;
       paint();
     });
+  }
+  const rangeForm = document.getElementById('range-form');
+  if (rangeForm) {
+    const today = new Date();
+    const weekAgo = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
+    document.getElementById('range-to').value = toInputDate(today);
+    document.getElementById('range-from').value = toInputDate(weekAgo);
+    rangeForm.addEventListener('submit', applyCustomRange);
   }
   const chart = document.getElementById('chart');
   chart.addEventListener('mousemove', onChartMove);
