@@ -44,8 +44,12 @@ let rangeMode = 'preset';
 // rangeStart / rangeEnd: custom pencere, yerel gun sinirlari (milisaniye).
 let rangeStart = null;
 let rangeEnd = null;
-// HISTORY_KEEP_MS: bellekte tutulan en uzun gecmis (31 gun).
+// HISTORY_KEEP_MS: demo bellekte tutulan en uzun gecmis (31 gun).
 const HISTORY_KEEP_MS = 31 * 24 * 60 * 60 * 1000;
+// HISTORY_FETCH_HOURS: canli API en fazla 48 saat verir. Daha uzunu 422 doner.
+const HISTORY_FETCH_HOURS = 48;
+// HISTORY_GAP_MS: bundan uzun bosluk cizgiyle doldurulmaz (2 saat).
+const HISTORY_GAP_MS = 2 * 60 * 60 * 1000;
 let status = API_BASE ? 'connecting' : 'unconfigured';
 let room = null;
 let hoverIndex = null;
@@ -359,7 +363,7 @@ async function getJson(url) {
 
 /*
  * fetchSnapshot
- * Anlik sayim + 31 gun gecmis + 3 node.
+ * Anlik sayim + en fazla 48 saat gecmis + 3 node.
  */
 async function fetchSnapshot(apiBase, historyHours) {
   const currentJson = await getJson(apiBase + '/occupancy/current');
@@ -577,6 +581,34 @@ function svgEl(name, attrs) {
 }
 
 /*
+ * paintGapNote
+ * Secilen pencere ilk gercek ornekten once basliyorsa bos gunleri yazar.
+ * Canli veride eksik tarih sinus ile doldurulmaz.
+ */
+function paintGapNote(points, windowStart) {
+  const note = document.getElementById('chart-note');
+  if (!note) {
+    return;
+  }
+  if (status !== 'live' || !points || points.length === 0) {
+    note.hidden = true;
+    note.textContent = '';
+    return;
+  }
+  const oldest = points[0].t;
+  if (oldest - windowStart <= 60 * 60 * 1000) {
+    note.hidden = true;
+    note.textContent = '';
+    return;
+  }
+  note.hidden = false;
+  note.textContent =
+    'No samples before ' +
+    formatAxis(oldest, oldest - windowStart) +
+    '. The server keeps 48 hours, so earlier dates stay empty.';
+}
+
+/*
  * drawChart
  * Kisi (altin) ve aktif cihaz (yesil) cizgileri. points bos ise bekleme metni.
  */
@@ -587,11 +619,12 @@ function drawChart() {
   const points = visiblePoints();
   svg.replaceChildren();
 
-  if (points.length < 2) {
+  if (points.length === 0) {
     empty.textContent = rangeMode === 'custom' ? 'No samples in this date range.' : 'Waiting for samples.';
     empty.hidden = false;
     svg.hidden = true;
     tip.hidden = true;
+    paintGapNote([], 0);
     return;
   }
 
@@ -607,9 +640,11 @@ function drawChart() {
   }
   peak = Math.ceil(peak);
 
-  const t0 = points[0].t;
-  const t1 = points[points.length - 1].t;
+  const bounds = windowBounds();
+  const t0 = bounds.start;
+  const t1 = bounds.end;
   const span = Math.max(1, t1 - t0);
+  paintGapNote(points, t0);
   const innerW = CHART_W - CHART_PAD.l - CHART_PAD.r;
   const innerH = CHART_H - CHART_PAD.t - CHART_PAD.b;
 
@@ -620,28 +655,63 @@ function drawChart() {
     return CHART_PAD.t + (1 - value / peak) * innerH;
   }
 
-  function buildLine(key) {
+  /*
+   * lineSegments
+   * Uzun boslugu duz cizgiyle birlestirmez. Veri olmayan gunler bos kalir.
+   */
+  function lineSegments(key) {
+    const paths = [];
     let d = '';
+    let count = 0;
+    let firstX = 0;
+    let lastX = 0;
     for (let i = 0; i < points.length; i++) {
-      const cmd = i === 0 ? 'M' : 'L';
-      d += cmd + xOf(points[i].t).toFixed(1) + ' ' + yOf(points[i][key]).toFixed(1) + ' ';
+      const broken = i > 0 && points[i].t - points[i - 1].t > HISTORY_GAP_MS;
+      if (broken && count > 1) {
+        paths.push({
+          d: d.trim(),
+          area:
+            d.trim() +
+            ' L' +
+            lastX.toFixed(1) +
+            ' ' +
+            yOf(0).toFixed(1) +
+            ' L' +
+            firstX.toFixed(1) +
+            ' ' +
+            yOf(0).toFixed(1) +
+            ' Z',
+        });
+      }
+      if (broken || count === 0) {
+        d = '';
+        count = 0;
+        firstX = xOf(points[i].t);
+      }
+      const cmd = count === 0 ? 'M' : 'L';
+      const x = xOf(points[i].t);
+      d += cmd + x.toFixed(1) + ' ' + yOf(points[i][key]).toFixed(1) + ' ';
+      lastX = x;
+      count += 1;
     }
-    return d.trim();
+    if (count > 1) {
+      paths.push({
+        d: d.trim(),
+        area:
+          d.trim() +
+          ' L' +
+          lastX.toFixed(1) +
+          ' ' +
+          yOf(0).toFixed(1) +
+          ' L' +
+          firstX.toFixed(1) +
+          ' ' +
+          yOf(0).toFixed(1) +
+          ' Z',
+      });
+    }
+    return paths;
   }
-
-  const peopleLine = buildLine('headcount');
-  const baseline = yOf(0);
-  const peopleArea =
-    peopleLine +
-    ' L' +
-    xOf(t1).toFixed(1) +
-    ' ' +
-    baseline.toFixed(1) +
-    ' L' +
-    xOf(t0).toFixed(1) +
-    ' ' +
-    baseline.toFixed(1) +
-    ' Z';
 
   const yTicks = [0, Math.round(peak / 2), peak];
   for (let i = 0; i < yTicks.length; i++) {
@@ -665,9 +735,17 @@ function drawChart() {
     svg.appendChild(label);
   }
 
-  svg.appendChild(svgEl('path', { d: peopleArea, class: 'people-area' }));
-  svg.appendChild(svgEl('path', { d: buildLine('activeDevices'), class: 'device-line' }));
-  svg.appendChild(svgEl('path', { d: peopleLine, class: 'people-line' }));
+  const peoplePaths = lineSegments('headcount');
+  const devicePaths = lineSegments('activeDevices');
+  for (let i = 0; i < peoplePaths.length; i++) {
+    svg.appendChild(svgEl('path', { d: peoplePaths[i].area, class: 'people-area' }));
+  }
+  for (let i = 0; i < devicePaths.length; i++) {
+    svg.appendChild(svgEl('path', { d: devicePaths[i].d, class: 'device-line' }));
+  }
+  for (let i = 0; i < peoplePaths.length; i++) {
+    svg.appendChild(svgEl('path', { d: peoplePaths[i].d, class: 'people-line' }));
+  }
 
   const labelCount = span > 12 * 60 * 60 * 1000 ? 4 : 5;
   for (let i = 0; i < labelCount; i++) {
@@ -929,7 +1007,7 @@ function beginDemo(nextStatus) {
  * REST anlik + gecmis + node. Basarida demo sayacini keser ve soketi acar.
  */
 async function pull() {
-  const snap = await fetchSnapshot(API_BASE, 31 * 24);
+  const snap = await fetchSnapshot(API_BASE, HISTORY_FETCH_HOURS);
   stopDemo();
   room = snap;
   status = 'live';
@@ -1006,12 +1084,23 @@ function onChartMove(event) {
     return;
   }
   const ratio = (x - CHART_PAD.l) / innerW;
-  let index = Math.round(ratio * (points.length - 1));
-  if (index < 0) {
-    index = 0;
+  const bounds = windowBounds();
+  const span = Math.max(1, bounds.end - bounds.start);
+  const time = bounds.start + ratio * span;
+  let index = 0;
+  let best = Math.abs(points[0].t - time);
+  for (let i = 1; i < points.length; i++) {
+    const dist = Math.abs(points[i].t - time);
+    if (dist < best) {
+      best = dist;
+      index = i;
+    }
   }
-  if (index > points.length - 1) {
-    index = points.length - 1;
+  const nearPx = (best / span) * innerW;
+  if (nearPx > 28) {
+    hoverIndex = null;
+    drawChart();
+    return;
   }
   hoverIndex = index;
   drawChart();

@@ -427,6 +427,12 @@ button:focus-visible {
   margin-top: 4px;
 }
 
+.chart-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
 .legend span,
 .chart-tip div {
   display: flex;
