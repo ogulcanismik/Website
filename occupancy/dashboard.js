@@ -940,17 +940,17 @@ function onChartMove(event) {
 
 /*
  * teachNote
- * Kac ders kayitli. 3'ten once varsayilan dogru, sonra tum dersler uydurulur.
+ * Her ders, o anki tahmini girilen kisiye yaklastirir. Uc nokta gerekmez.
  */
 function teachNote(samples) {
   const count = num(samples, 0);
   if (count < 1) {
-    return 'No lessons yet. The default line stays until 3 counts are saved.';
+    return 'No lessons yet. One count compares your number with the current estimate and moves the slope and intercept.';
   }
-  if (count < 3) {
-    return count + ' saved. ' + (3 - count) + ' more until the line is fit to your counts.';
+  if (count === 1) {
+    return '1 lesson applied. The slope and intercept moved toward that count.';
   }
-  return count + ' lessons. The line is fit to all of them. More counts improve the fit.';
+  return count + ' lessons applied. Each one pulled the slope and intercept toward the count you entered.';
 }
 
 /*

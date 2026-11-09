@@ -96,10 +96,19 @@
             <h2>History</h2>
             <p class="panel-sub">People from the line, and the device count that fed it.</p>
           </div>
-          <div class="segment" role="group" aria-label="History window">
-            <button type="button" data-hours="1" aria-pressed="false">1h</button>
-            <button type="button" data-hours="6" aria-pressed="true">6h</button>
-            <button type="button" data-hours="24" aria-pressed="false">24h</button>
+          <div class="history-controls">
+            <div class="segment" role="group" aria-label="History window">
+              <button type="button" data-hours="1" aria-pressed="false">1h</button>
+              <button type="button" data-hours="6" aria-pressed="true">6h</button>
+              <button type="button" data-hours="24" aria-pressed="false">24h</button>
+              <button type="button" data-hours="168" aria-pressed="false">1w</button>
+              <button type="button" data-hours="720" aria-pressed="false">1mo</button>
+            </div>
+            <form id="range-form" class="range-form">
+              <label>From <input id="range-from" type="date" required /></label>
+              <label>To <input id="range-to" type="date" required /></label>
+              <button type="submit">Show</button>
+            </form>
           </div>
         </div>
         <div class="chart-wrap">
@@ -137,7 +146,7 @@
         <div class="panel-head">
           <div>
             <h2>Teaching</h2>
-            <p class="panel-sub">Count the people in the room and save. Each save is one lesson for the line.</p>
+            <p class="panel-sub">Enter how many people are here. That count is compared with the current estimate and moves the slope and intercept.</p>
           </div>
         </div>
         <form id="teach-form" class="teach-form">
@@ -148,7 +157,7 @@
           <button type="submit" id="teach-save">Save count</button>
           <button type="button" id="teach-reset" class="teach-reset">Reset</button>
         </form>
-        <p id="teach-note" class="cal-note">The default line stays until 3 counts are saved.</p>
+        <p id="teach-note" class="cal-note">The line starts at the default. One count is enough to move it.</p>
       </section>
 
       <footer class="pipeline">
